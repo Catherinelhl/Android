@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" data-toggle="collapse"
+					data-target="#navbar-collapse" aria-expanded="false"
+					class="navbar-toggle collapsed">
+					<span class="sr-only">Toggle navigation</span><span
+						class="icon-bar"></span><span class="icon-bar"></span><span
+						class="icon-bar"></span>
+				</button>
+				<a href="http://www.echartsjs.com/index.html" class="navbar-brand"><img
+					src="./images/logo.png" alt="echarts logo" class="navbar-logo"></a>
+			</div>
+			<div id="navbar-collapse" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-left">
+					<li id="nav-index"><a
+						href="http://www.echartsjs.com/index.html">首页</a></li>
+					<li id="nav-doc" class="dropdown"><a href="#"
+						data-toggle="dropdown" class="dropdown-toggle">文档<b
+							class="caret"></b></a>
+					<ul class="dropdown-menu">
+							<li><a href="http://www.echartsjs.com/feature.html">特性</a></li>
+							<li><a href="http://www.echartsjs.com/tutorial.html">教程</a></li>
+							<li><a href="http://www.echartsjs.com/api.html">API</a></li>
+							<li><a href="http://www.echartsjs.com/option.html">配置项手册</a></li>
+							<li><a href="http://www.echartsjs.com/option-gl.html">GL
+									配置项手册</a></li>
+							<li><a href="http://www.echartsjs.com/faq.html">常见问题</a></li>
+							<li><a href="http://www.echartsjs.com/changelog.html">版本记录</a></li>
+						</ul></li>
+					<li id="nav-download" class="dropdown"><a href="#"
+						data-toggle="dropdown" class="dropdown-toggle">下载<b
+							class="caret"></b></a>
+					<ul class="dropdown-menu">
+							<li><a href="http://www.echartsjs.com/download.html">下载</a></li>
+							<li><a href="http://www.echartsjs.com/download-theme.html">主题下载</a></li>
+							<li><a href="http://www.echartsjs.com/download-map.html">地图下载</a></li>
+							<li><a
+								href="http://www.echartsjs.com/download-extension.html">扩展下载</a></li>
+						</ul></li>
+					<li id="nav-examples" class="active"><a href="#"
+						data-toggle="dropdown" class="dropdown-toggle">实例<b
+							class="caret"></b></a>
+					<ul class="dropdown-menu">
+							<li><a href="http://www.echartsjs.com/examples/">官方实例</a></li>
+							<li><a
+								href="http://www.echartsjs.com/examples/index.html#chart-type-globe">GL
+									实例</a></li>
+						</ul></li>
+					<li id="nav-community"><a href="#" data-toggle="dropdown"
+						class="dropdown-toggle">社区<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+							<li><a href="http://gallery.echartsjs.com">GALLERY</a></li>
+							<li><a href="http://efe.baidu.com/tags/ECharts/">博客</a></li>
+						</ul></li>
+					<li id="nav-tool" class=""><a href="#" data-toggle="dropdown"
+						class="dropdown-toggle" aria-expanded="false">工具<b
+							class="caret"></b></a>
+					<ul class="dropdown-menu">
+							<li><a href="http://www.echartsjs.com/spreadsheet.html">表格工具</a></li>
+							<li><a href="http://ecomfe.github.io/echarts-map-tool/">地图数据在线工具</a></li>
+							<li><a href="http://echarts.baidu.com/theme-builder/">主题构建工具</a></li>
+						</ul></li>
+					<li id="nav-about"><a href="#" data-toggle="dropdown"
+						class="dropdown-toggle">关于<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+							<li><a href="http://www.echartsjs.com/about.html">关于我们</a></li>
+							<li><a
+								href="https://github.com/ecomfe/echarts/blob/master/LICENSE">版权声明</a></li>
+						</ul></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li id="nav-github"><a
+						href="https://github.com/ecomfe/echarts" target="_blank"><img
+							src="http://www.echartsjs.com/images/github.png" width="18"></a></li>
+					<li id="nav-2" class="0"><a
+						href="http://echarts.baidu.com/echarts2/">2.0</a></li>
+					<li id="nav-homeen"><a
+						href="https://ecomfe.github.io/echarts-doc/public/en/index.html">EN</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<script type="text/javascript">
+		var selector = window.EC_DEMO_LANG === 'en' ? 'nav-start'
+				: 'nav-examples';
+		var menu = document.getElementById(selector);
+		if (menu) {
+			menu.className = 'active';
+		}
+	</script>
+	<div id="main-container">
+		<div id="code-container" style="width: 40%;">
+			<div id="control-panel">
+				<div id="code-info"></div>
+				<div class="control-btn-panel">
+					<a href="javascript:;" onclick="disposeAndRun()"
+						class="btn btn-default btn-sm">运行</a>
+				</div>
+			</div>
+			<div id="code-panel" class=" ace_editor ace-tm">
+				<textarea class="ace_text-input" wrap="off" autocorrect="off"
+					autocapitalize="off" spellcheck="false"
+					style="opacity: 0; height: 16px; width: 7.20125px; left: 397.459px; top: 313px;"></textarea>
+				<div class="ace_gutter">
+					<div class="ace_layer ace_gutter-layer ace_folding-enabled"
+						style="margin-top: -7px; height: 424px; width: 55px;">
+						<div class="ace_gutter-cell " style="height: 16px;">244</div>
+						<div class="ace_gutter-cell " style="height: 16px;">
+							245<span class="ace_fold-widget ace_start ace_open"
+								style="height: 16px;"></span>
+						</div>
+						<div class="ace_gutter-cell " style="height: 16px;">246</div>
+						<div class="ace_gutter-cell " style="height: 16px;">247</div>
+						<div class="ace_gutter-cell " style="height: 16px;">248</div>
+						<div class="ace_gutter-cell " style="height: 16px;">249</div>
+						<div class="ace_gutter-cell " style="height: 16px;">
+							250<span class="ace_fold-widget ace_start ace_open"
+								style="height: 16px;"></span>
+						</div>
+						<div class="ace_gutter-cell " style="height: 16px;">251</div>
+						<div class="ace_gutter-cell " style="height: 16px;">252</div>
+						<div class="ace_gutter-cell " style="height: 16px;">253</div>
+						<div class="ace_gutter-cell " style="height: 16px;">
+							254<span class="ace_fold-widget ace_start ace_open"
+								style="height: 16px;"></span>
+						</div>
+						<div class="ace_gutter-cell " style="height: 16px;">255</div>
+						<div class="ace_gutter-cell " style="height: 16px;">256</div>
+						<div class="ace_gutter-cell " style="height: 16px;">257</div>
+						<div class="ace_gutter-cell " style="height: 16px;">258</div>
+						<div class="ace_gutter-cell " style="height: 16px;">259</div>
+						<div class="ace_gutter-cell " style="height: 16px;">260</div>
+						<div class="ace_gutter-cell " style="height: 16px;">261</div>
+						<div class="ace_gutter-cell " style="height: 16px;">262</div>
+						<div class="ace_gutter-cell " style="height: 16px;">263</div>
+						<div class="ace_gutter-cell " style="height: 16px;">264</div>
+						<div class="ace_gutter-cell " style="height: 16px;">265</div>
+						<div class="ace_gutter-cell " style="height: 16px;">
+							266<span class="ace_fold-widget ace_start ace_open"
+								style="height: 16px;"></span>
+						</div>
+						<div class="ace_gutter-cell " style="height: 16px;">267</div>
+						<div class="ace_gutter-cell " style="height: 16px;">268</div>
+						<div class="ace_gutter-cell " style="height: 16px;">269</div>
+						<div class="ace_gutter-cell " style="height: 16px;">270</div>
+					</div>
+					<div class="ace_gutter-active-line"
+						style="top: 313px; height: 16px;"></div>
+				</div>
+				<div class="ace_scroller"
+					style="left: 55px; right: 15px; bottom: 0px;">
+					<div class="ace_content"
+						style="margin-top: -7px; width: 698px; height: 424px; margin-left: 0px;">
+						<div class="ace_layer ace_print-margin-layer">
+							<div class="ace_print-margin"
+								style="left: 580.1px; visibility: visible;"></div>
+						</div>
+						<div class="ace_layer ace_marker-layer">
+							<div class="ace_active-line"
+								style="height: 16px; top: 320px; left: 0; right: 0;"></div>
+						</div>
+						<div class="ace_layer ace_text-layer" style="padding: 0px 4px;">
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span> <span
+									class="ace_paren ace_rparen">}</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span> <span
+									class="ace_paren ace_lparen">{</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">name</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_string">'MA30'</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">type</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_string">'line'</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">data</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_identifier">calculateMA</span><span
+									class="ace_paren ace_lparen">(</span><span
+									class="ace_constant ace_numeric">30</span><span
+									class="ace_punctuation ace_operator">,</span> <span
+									class="ace_identifier">data</span><span
+									class="ace_paren ace_rparen">)</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">smooth</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_constant ace_language ace_boolean">true</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">lineStyle</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_paren ace_lparen">{</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span><span class="ace_indent-guide"> </span> <span
+									class="ace_identifier">normal</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_paren ace_lparen">{</span><span
+									class="ace_identifier">opacity</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_constant ace_numeric">0.5</span><span
+									class="ace_paren ace_rparen">}</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_paren ace_rparen">}</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span> <span
+									class="ace_paren ace_rparen">}</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span> <span
+									class="ace_paren ace_lparen">{</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">name</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_string">'Volume'</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">type</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_string">'bar'</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">xAxisIndex</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_constant ace_numeric">1</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">yAxisIndex</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_constant ace_numeric">1</span><span
+									class="ace_punctuation ace_operator">,</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span><span class="ace_indent-guide">
+								</span> <span class="ace_identifier">data</span><span
+									class="ace_punctuation ace_operator">:</span> <span
+									class="ace_identifier">data</span><span
+									class="ace_punctuation ace_operator">.</span><span
+									class="ace_identifier">volumes</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span><span
+									class="ace_indent-guide"> </span> <span
+									class="ace_paren ace_rparen">}</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_indent-guide"> </span> <span
+									class="ace_paren ace_rparen">]</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_paren ace_rparen">}</span><span
+									class="ace_punctuation ace_operator">,</span> <span
+									class="ace_constant ace_language ace_boolean">true</span><span
+									class="ace_paren ace_rparen">)</span><span
+									class="ace_punctuation ace_operator">;</span>
+							</div>
+							<div class="ace_line" style="height: 16px"></div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_comment">// myChart.on('brushSelected',
+									renderBrushed);</span>
+							</div>
+							<div class="ace_line" style="height: 16px"></div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_comment">// function
+									renderBrushed(params) {</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_comment">// var sum = 0;</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_comment">// var min = Infinity;</span>
+							</div>
+							<div class="ace_line" style="height: 16px">
+								<span class="ace_comment">// var max = -Infinity;</span>
+							</div>
+						</div>
+						<div class="ace_layer ace_marker-layer"></div>
+						<div class="ace_layer ace_cursor-layer ace_hidden-cursors">
+							<div class="ace_cursor"
+								style="left: 342.459px; top: 320px; width: 7.20125px; height: 16px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="ace_scrollbar ace_scrollbar-v"
+					style="width: 20px; bottom: 0px;">
+					<div class="ace_scrollbar-inner"
+						style="width: 20px; height: 4784px;"></div>
+				</div>
+				<div class="ace_scrollbar ace_scrollbar-h"
+					style="display: none; height: 20px; left: 55px; right: 15px;">
+					<div class="ace_scrollbar-inner"
+						style="height: 20px; width: 698px;"></div>
+				</div>
+				<div
+					style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: hidden;">
+					<div
+						style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: visible;"></div>
+					<div
+						style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-style: inherit; font-variant: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; overflow: visible;">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+				</div>
+			</div>
+		</div>
+		<div id="h-handler" class="handler" style="left: 40%;"></div>
+		<div class="right-container" style="width: 60%; left: 40%;">
+			<div id="chart-panel" class="right-panel"
+				_echarts_instance_="ec_1541729093233"
+				style="-webkit-tap-highlight-color: transparent; user-select: none;">
+				<div
+					style="position: relative; overflow: hidden; width: 1132px; height: 352px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+					<canvas data-zr-dom-id="zr_0" width="1132" height="352"
+						style="position: absolute; left: 0px; top: 0px; width: 1132px; height: 352px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+				</div>
+				<div
+					style="position: absolute; display: none; border-style: solid; white-space: nowrap; z-index: 9999999; transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s, top 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s; background-color: rgba(245, 245, 245, 0.8); border-width: 1px; border-color: rgb(204, 204, 204); border-radius: 4px; color: rgb(0, 0, 0); font: 14px/21px sans-serif; padding: 10px; left: 949px; top: 20px; pointer-events: none;">
+					2016-03-29<br>
+					<span
+						style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 10px; height: 10px; background-color: rgba(0, 218, 60, 0.1);"></span>Dow-Jones
+					index: <br>
+					<span
+						style="display: inline-block; vertical-align: middle; margin-right: 8px; margin-left: 3px; border-radius: 4px; width: 4px; height: 4px; background-color: rgba(0, 218, 60, 0.1);"></span>open:
+					17,512.58<br>
+					<span
+						style="display: inline-block; vertical-align: middle; margin-right: 8px; margin-left: 3px; border-radius: 4px; width: 4px; height: 4px; background-color: rgba(0, 218, 60, 0.1);"></span>close:
+					17,633.11<br>
+					<span
+						style="display: inline-block; vertical-align: middle; margin-right: 8px; margin-left: 3px; border-radius: 4px; width: 4px; height: 4px; background-color: rgba(0, 218, 60, 0.1);"></span>lowest:
+					17,434.27<br>
+					<span
+						style="display: inline-block; vertical-align: middle; margin-right: 8px; margin-left: 3px; border-radius: 4px; width: 4px; height: 4px; background-color: rgba(0, 218, 60, 0.1);"></span>highest:
+					17,642.81<br>
+					<span
+						style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 10px; height: 10px; background-color: rgba(194, 53, 49, 0.1);"></span>MA5:
+					17,553.878<br>
+					<span
+						style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 10px; height: 10px; background-color: rgba(47, 69, 84, 0.1);"></span>MA10:
+					17,505.434<br>
+					<span
+						style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 10px; height: 10px; background-color: rgba(97, 160, 168, 0.1);"></span>MA20:
+					17,262.27<br>
+					<span
+						style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 10px; height: 10px; background-color: rgba(212, 130, 101, 0.1);"></span>MA30:
+					17,003.075<br>
+					<br>2016-03-29<br>
+					<span
+						style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 10px; height: 10px; background-color: rgba(0, 218, 60, 0.1);"></span>Volume:
+					86,160,000
+				</div>
+			</div>
+			<div id="tool-panel">
+				<div id="theme">
+					<a title="" class="default selected" data-original-title="default"><span></span></a><a
+						title="" class="light" data-original-title="light"><span></span></a><a
+						title="" class="dark" data-original-title="dark"><span></span></a>
+				</div>
+				<button id="download" class="btn btn-sm">Download</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		if (window !== top) {
+			var nav = document.getElementsByClassName('navbar')[0];
+			nav.parentNode.removeChild(nav);
+			document.getElementById('main-container').style.top = 0;
+		}
+	</script>
+	<script type="text/javascript" src="./vendors/jquery/jquery.js"></script>
+	<script type="text/javascript"
+		src="./vendors/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="./vendors/lodash.js"></script>
+	<script type="text/javascript" src="./vendors/dat.gui.min.js"></script>
+	<script type="text/javascript"
+		src="./vendors/echarts/echarts.min.js?_v_=1539619299314"></script>
+	<script type="text/javascript"
+		src="./vendors/echarts-stat/ecStat.min.js?_v_=1539619299314"></script>
+	<script type="text/javascript"
+		src="./vendors/echarts/map/js/china.js?_v_=1539619299314"></script>
+	<script type="text/javascript"
+		src="./vendors/echarts/map/js/world.js?_v_=1539619299314"></script>
+	<script type="text/javascript"
+		src="./vendors/echarts/extension/dataTool.js?_v_=1539619299314"></script>
+	<script type="text/javascript"
+		src="https://api.map.baidu.com/api?v=2.0&amp;ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+	<script type="text/javascript"
+		src="https://api.map.baidu.com/getscript?v=2.0&amp;ak=ZUONbpqGBsYGXNIYHicvbAbM&amp;services=&amp;t=20181029172410"></script>
+	<script type="text/javascript"
+		src="./vendors/echarts/extension/bmap.js?_v_=1539619299314"></script>
+	<script type="text/javascript" src="./vendors/ace/src/ace.js"></script>
+	<script type="text/javascript"
+		src="./vendors/ace/src/ext-language_tools.js"></script>
+	<script type="text/javascript"
+		src="./javascripts/editor.js?_v_=1539619299314"></script>
+	<script type="text/javascript" src="./javascripts/hm.js"></script>
+	<script type="text/javascript">
+		document.getElementById('nav-examples').className = 'active';
+	</script>
+</body>
+</html>
