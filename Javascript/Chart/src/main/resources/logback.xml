@@ -24,15 +24,7 @@
 						<File>${user.home}/Desktop/Works/OrangeBlock/JavaTech/Logs/Chart_Log/${byDate}_Chart_Log.txt</File>
 					</then>
 					<else>
-						<File>${user.home}/Desktop/Chart_Log/${byDate}_Chart_Log.txt</File>
-					</else>
-				</if>
-				<if condition='property("user.name").toLowerCase().equals("wangmiaomiao")'>
-					<then>
 						<File>${user.home}/Desktop/Logs/Chart_Log/${byDate}_Chart_Log.txt</File>
-					</then>
-					<else>
-						<File>${user.home}/Desktop/Chart_Log/${byDate}_Chart_Log.txt</File>
 					</else>
 				</if>
 			</then>
@@ -56,16 +48,7 @@
 						<File>${user.home}/Desktop/Works/OrangeBlock/JavaTech/Logs/Chart_Log/Chart_Log.txt</File>
 					</then>
 					<else>
-						<File>${user.home}/Desktop/Log/Chart_Log/Chart_Log.txt</File>
-					</else>
-				</if>
-				
-				<if condition='property("user.name").toLowerCase().equals("wangmiaomiao")'>
-					<then>
-						<File>${user.home}/Desktop/Logs/Chart_Log/${byDate}_Chart_Log.txt</File>
-					</then>
-					<else>
-						<File>${user.home}/Desktop/Chart_Log/${byDate}_Chart_Log.txt</File>
+						<File>${user.home}/Desktop/Logs/Chart_Log/Chart_Log.txt</File>
 					</else>
 				</if>
 			</then>
@@ -88,17 +71,9 @@
 							<fileNamePattern>${user.home}/Desktop/Works/OrangeBlock/JavaTech/Logs/Chart_Log/zip/http/%d{yyyy-MM-dd}/_%i-Log.txt.zip</fileNamePattern>
 						</then>
 						<else>
-		  					<fileNamePattern>${user.home}/Desktop/Chart_Log/zip/http/%d{yyyy-MM-dd}/_%i-Log.txt.zip</fileNamePattern>
+		  					<fileNamePattern>${user.home}/Desktop/Logs/Chart_Log/zip/http/%d{yyyy-MM-dd}/_%i-Log.txt.zip</fileNamePattern>
 		  				</else>
 		  			</if>
-		  			<if condition='property("user.name").toLowerCase().equals("wangmiaomiao")'>
-						<then>
-							<File>${user.home}/Desktop/Logs/Chart_Log/${byDate}_Chart_Log.txt</File>
-						</then>
-						<else>
-							<File>${user.home}/Desktop/Chart_Log/${byDate}_Chart_Log.txt</File>
-						</else>
-					</if>
 		  		</then>
 		  		<else>
 		  			<fileNamePattern>/dpf/logs/Chart/zip/http/%d{yyyy-MM-dd}/_%i-Log.txt.zip</fileNamePattern>
