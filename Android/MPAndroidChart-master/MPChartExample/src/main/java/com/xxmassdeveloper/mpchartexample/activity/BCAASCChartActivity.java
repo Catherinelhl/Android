@@ -1,4 +1,4 @@
-package com.xxmassdeveloper.mpchartexample;
+package com.xxmassdeveloper.mpchartexample.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,10 +33,14 @@ import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.xxmassdeveloper.mpchartexample.R;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
 
 import java.util.ArrayList;
 
+/**
+ * 单数据
+ */
 public class BCAASCChartActivity extends DemoBase {
 
     private CombinedChart chart;

@@ -1,4 +1,4 @@
-package com.xxmassdeveloper.mpchartexample;
+package com.xxmassdeveloper.mpchartexample.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,19 +35,32 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.listener.OnDrawListener;
+import com.xxmassdeveloper.mpchartexample.R;
+import com.xxmassdeveloper.mpchartexample.contract.BcaasCChartContract;
 import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.MyMarkerView;
 import com.xxmassdeveloper.mpchartexample.custom.MyValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.XYMarkerView;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
+import com.xxmassdeveloper.mpchartexample.presenter.BcaasCChartPresenterImp;
+import com.xxmassdeveloper.mpchartexample.tool.LogTool;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class BCAASCMultiChartActivity extends DemoBase implements OnChartValueSelectedListener {
+/**
+ * 多数据
+ */
+
+public class BCAASCMultiChartActivity extends DemoBase
+        implements OnChartValueSelectedListener, BcaasCChartContract.View {
 
     private CombinedChart chart;
     private BarChart chartBar;
     private final int count = 24;
+    private String TAG = BCAASCMultiChartActivity.class.getSimpleName();
+
+    private BcaasCChartContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,13 @@ public class BCAASCMultiChartActivity extends DemoBase implements OnChartValueSe
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_bcaasc_mutilple);
 
+        initView();
+
+    }
+
+    private void initView() {
+        presenter = new BcaasCChartPresenterImp(this);
+        presenter.getKLine();
         setTitle("BCAASCMultiChartActivity");
 
         chart = findViewById(R.id.chart1);
@@ -66,6 +86,31 @@ public class BCAASCMultiChartActivity extends DemoBase implements OnChartValueSe
 
     }
 
+    // Open time
+//    "0.01634790",       // Open
+//            "0.80000000",       // High
+//            "0.01575800",       // Low
+//            "0.01577100",       // Close
+//            "148976.11427815",  // Volume
+//            1499644799999,      // Close time
+//            "2434.19055334",    // Quote asset volume
+//            308,                // Number of trades
+//            "1756.87402397",    // Taker buy base asset volume
+//            "28.46694368",      // Taker buy quote asset volume
+//            "17928899.62484339" // Ignore.
+
+
+    private String open;
+    private String High;
+    private String Low;
+    private String Close;
+    private String Volume;
+    private String CloseTime;
+    private String QuoteAssetVolume;
+    private String NumberOfTrades;
+    private String TakerBuyBaseAssetVolume;
+    private String TakerBuyQuoteAssetVolume;
+    private String Ignore;
 
     private void initChart() {
         chart.getDescription().setEnabled(false);
@@ -447,6 +492,34 @@ public class BCAASCMultiChartActivity extends DemoBase implements OnChartValueSe
 
     @Override
     public void onNothingSelected() {
+
+    }
+
+    @Override
+    public void getKLineSuccess(List<List<String>> kLineData) {
+        for (List<String> childKLineData : kLineData) {
+            String open = childKLineData.get(0);
+            String High = childKLineData.get(1);
+            String Low = childKLineData.get(2);
+            String Close = childKLineData.get(3);
+            String Volume = childKLineData.get(4);
+            String CloseTime = childKLineData.get(5);
+            String QuoteAssetVolume = childKLineData.get(6);
+            String NumberOfTrades = childKLineData.get(7);
+            String TakerBuyBaseAssetVolume = childKLineData.get(8);
+            String TakerBuyQuoteAssetVolume = childKLineData.get(9);
+            String Ignore = childKLineData.get(10);
+            LogTool.d(TAG, "open:" + open + "High:" + High +
+                    "Low:" + Low + "Close:" + Close + "Volume:" + Volume +
+                    "CloseTime:" + CloseTime + "QuoteAssetVolume:" + QuoteAssetVolume + "NumberOfTrades:" + NumberOfTrades +
+                    "TakerBuyBaseAssetVolume:" + TakerBuyBaseAssetVolume + "TakerBuyQuoteAssetVolume:" + TakerBuyQuoteAssetVolume
+                    + "Ignore:" + Ignore);
+        }
+
+    }
+
+    @Override
+    public void getKLineFailure(String failureInfo) {
 
     }
 }

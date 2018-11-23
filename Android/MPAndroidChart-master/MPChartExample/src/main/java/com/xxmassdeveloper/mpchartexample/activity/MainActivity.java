@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.github.mikephil.charting.utils.Utils;
-import com.xxmassdeveloper.mpchartexample.BCAASCChartActivity;
-import com.xxmassdeveloper.mpchartexample.BCAASCMultiChartActivity;
 import com.xxmassdeveloper.mpchartexample.R;
 
 import androidx.appcompat.app.AppCompatActivity;
