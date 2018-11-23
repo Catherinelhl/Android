@@ -15,6 +15,8 @@ class KLineView: UIView {
     
     private let combinedChartView = CombinedChartView()
     private let barChartView = BarChartView()
+    
+    private var data = [[Any]]()
 
     init() {
         super.init(frame: .zero)
@@ -35,11 +37,13 @@ class KLineView: UIView {
         setSubviewsLayout()
     }
     
+    // MARK: 设置组合图表
     private func setCombinedChartView() {
         // y轴自动调节上下限
         combinedChartView.autoScaleMinMaxEnabled = true
         combinedChartView.scaleYEnabled = false
         combinedChartView.chartDescription?.enabled = false
+        combinedChartView.doubleTapToZoomEnabled = false
         
         let xAxis = combinedChartView.xAxis
         xAxis.labelPosition = .bottom
@@ -60,14 +64,21 @@ class KLineView: UIView {
         self.addSubview(combinedChartView)
     }
     
+    // MARK: 设置柱状图
     private func setBarChartView() {
         //设置柱状图
         barChartView.autoScaleMinMaxEnabled = true
         barChartView.scaleYEnabled = false
         barChartView.chartDescription?.enabled = false
+        barChartView.doubleTapToZoomEnabled = false
+//        let highLighter = Highlight()
+//        highLighter.drawY = 0.7
+//        barChartView.highlighter = BarHighLightLine()
         
-        barChartView.xAxis.labelPosition = .bottom
-        barChartView.xAxis.drawGridLinesEnabled = false
+        let xAxis = barChartView.xAxis
+        xAxis.labelPosition = .bottom
+        xAxis.drawGridLinesEnabled = false
+//        xAxis.valueFormatter = DateValueFormatter()
         
         let leftAxis = barChartView.leftAxis
         leftAxis.drawLabelsEnabled = false
@@ -83,6 +94,7 @@ class KLineView: UIView {
         self.addSubview(barChartView)
     }
     
+    // MARK: 设置子视图约束
     private func setSubviewsLayout() {
         
         barChartView.snp.makeConstraints { (make) in
@@ -96,14 +108,17 @@ class KLineView: UIView {
         }
     }
     
+    // MARK: - 设置数据
     func setData(_ data:[[Any]]) {
+        
+        self.data = data
         
         setCombinedChartData(with: data)
 
         setBarChartData(with: data)
         
     }
-    
+    // MARK: 设置组合图表数据
     private func setCombinedChartData(with data:[[Any]]) {
         let combinedData = CombinedChartData.init()
         combinedData.candleData = generateCanldeData(with: data)
@@ -120,13 +135,16 @@ class KLineView: UIView {
 //        combinedChartView.viewPortHandler.refresh(newMatrix: srcMatrix, chart: combinedChartView, invalidate: true)
     }
     
+    // MARK: 设置柱状图数据
     private func setBarChartData(with data:[[Any]]) {
         /* 柱状图数据设置 */
         let barData = generateBarData(with: data)
         barChartView.data = barData
         
-        barChartView.xAxis.axisMaximum = barData.xMax + 5
-        barChartView.xAxis.axisMinimum = barData.xMin - 5
+        let xAxis = barChartView.xAxis
+        xAxis.valueFormatter = DateValueFormatter(data: data)
+        xAxis.axisMaximum = barData.xMax + 5
+        xAxis.axisMinimum = barData.xMin - 5
         
         let scaleX = barData.xMax >= 50 ? CGFloat(barData.xMax / 50) : 1
         barChartView.zoom(scaleX: scaleX , scaleY: 1, xValue: barData.xMax, yValue: barData.yMax, axis: .left)
@@ -135,6 +153,7 @@ class KLineView: UIView {
 //        barChartView.viewPortHandler.refresh(newMatrix: srcMatrix, chart: barChartView, invalidate: true)
     }
     
+    // MARK: 初始化蜡烛图数据
     private func generateCanldeData(with data:[[Any]]) -> CandleChartData {
         
         var entries = [CandleChartDataEntry]()
@@ -164,6 +183,7 @@ class KLineView: UIView {
         return CandleChartData(dataSet: set)
     }
     
+    // MARK: 初始化曲线图数据
     private func generateLineData(with data:[[Any]]) -> LineChartData{
         
         let set_MA10 = getMA10LineChartSet(with: data)
@@ -172,6 +192,7 @@ class KLineView: UIView {
         return LineChartData(dataSets: [set_MA10,set_MA50])
     }
     
+    // MARK: 初始化柱状图数据
     private func generateBarData(with data:[[Any]]) -> BarChartData {
         var entries = [BarChartDataEntry]()
         var barColorsArray = [UIColor]()
@@ -193,9 +214,11 @@ class KLineView: UIView {
         set.colors = barColorsArray
         set.drawValuesEnabled = false
         
+        
         return BarChartData(dataSet: set)
     }
     
+    // MARK: 获取MA10折线图数据
     private func getMA10LineChartSet(with data:[[Any]]) -> LineChartDataSet{
         var entries = [ChartDataEntry]()
         let closePriceMA10Array = getClosePriceArray(with: data, days: 10)
@@ -208,7 +231,7 @@ class KLineView: UIView {
         set.setColor(.cyan)
         return set
     }
-    
+    // MARK: 获取MA50折线图数据
     private func getMA50LineChartSet(with data:[[Any]]) -> LineChartDataSet{
         var entries = [ChartDataEntry]()
         let closePriceMA10Array = getClosePriceArray(with: data, days: 50)
@@ -242,16 +265,87 @@ class KLineView: UIView {
         return closePriceArray
     }
     
+    // MARK: 设置折线图
     private func configLineSet(_ set:LineChartDataSet){
         set.lineWidth = 1
         set.mode = .cubicBezier
         set.drawValuesEnabled = false
         set.drawCirclesEnabled = false
+        set.highlightEnabled = false
     }
     
+    // MARK: 显示数据MarkView标签
+    private func showMarkView(value:String) {
+        let marker = MarkerView.init(frame: CGRect(x: 0, y: 0, width: 120, height: 90))
+        marker.chartView = self.combinedChartView
+        let label = UILabel.init(frame: CGRect(x: 0, y: 0, width: 120, height: 90))
+        label.numberOfLines = 0
+        label.text = value
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.backgroundColor = .gray
+//        label.textAlignment = .center
+        marker.addSubview(label)
+        self.combinedChartView.marker = marker
+    }
 }
 
 extension KLineView : ChartViewDelegate {
+    
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        
+        if let candleEntry = entry as? CandleChartDataEntry {
+            var value = ""
+            let jsonArray = JSON(data[Int(candleEntry.x)])
+
+            let open = jsonArray[1].stringValue.nsDecimalValue
+            let openString = "开:\(open.stringValue)" + "\n"
+            MyLog(openString)
+            value += openString
+
+            let close = jsonArray[4].stringValue.nsDecimalValue
+            let closeString = "收:\(close.stringValue)" + "\n"
+            MyLog(closeString)
+            value += closeString
+
+            let high = jsonArray[2].stringValue.nsDecimalValue
+            let highString = "高:\(high.stringValue)" + "\n"
+            MyLog(highString)
+            value += highString
+
+            let low = jsonArray[3].stringValue.nsDecimalValue
+            let lowString = "低:\(low.stringValue)" + "\n"
+            MyLog(lowString)
+            value += lowString
+
+            let volume = jsonArray[5].stringValue.nsDecimalValue
+            let volumeString = "交易量:\(volume.stringValue)" + "\n"
+            MyLog(volumeString)
+            value += volumeString
+
+            let timestamp = jsonArray[0].doubleValue
+            MyLog(timestamp)
+            let timeString = Date(timeIntervalSince1970: timestamp/1000).dateFormatter()
+            let time = "时间:\(timeString)"
+            MyLog(time)
+            value += time
+
+            showMarkView(value: value)
+
+            barChartView.highlightValue(x: candleEntry.x, dataSetIndex: 0, callDelegate:false)
+            
+        }else if let barEntry = entry as? BarChartDataEntry {
+            combinedChartView.highlightValue(x: barEntry.x, dataSetIndex: 0, dataIndex: 1, callDelegate:true)
+            
+        }
+    }
+    
+    func chartValueNothingSelected(_ chartView: ChartViewBase) {
+        barChartView.highlightValues(nil)
+        combinedChartView.highlightValues(nil)
+    }
+    
+    
     func chartScaled(_ chartView: ChartViewBase, scaleX: CGFloat, scaleY: CGFloat) {
         let srcMatrix = chartView.viewPortHandler.touchMatrix
         combinedChartView.viewPortHandler.refresh(newMatrix: srcMatrix, chart: combinedChartView, invalidate: true)
@@ -267,13 +361,19 @@ extension KLineView : ChartViewDelegate {
 
 class DateValueFormatter: NSObject ,IAxisValueFormatter {
     private let dateFormatter = DateFormatter.init()
-    init(dateFormat:String = "yy-MM-dd") {
+    private var data = [[Any]]()
+    init(dateFormat:String = "yy-MM-dd", data:[[Any]]) {
         super.init()
         dateFormatter.dateFormat = dateFormat
+        self.data = data
     }
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-        return dateFormatter.string(from: Date.init(timeIntervalSince1970: value/1000))
+        if let dataArray = data[safe:Int(value)] {
+            let timestamp = JSON(dataArray)[0].doubleValue
+            return dateFormatter.string(from: Date.init(timeIntervalSince1970: timestamp/1000))
+        }
+        return ""
     }
 }
 
@@ -282,6 +382,27 @@ extension String {
         get{
             return NSDecimalNumber.init(string: self).doubleValue
         }
+    }
+    var nsDecimalValue:NSDecimalNumber{
+        return NSDecimalNumber(string: self)
+    }
+
+}
+extension Date {
+    func dateFormatter(_ dataFormat:String = "yyyy-MM-dd") -> String{
+        let dataFormatter = DateFormatter()
+        dataFormatter.dateFormat = dataFormat
+        return dataFormatter.string(from: self)
+    }
+}
+//MARK: - Array
+extension Array {
+    subscript (safe index:Int) -> Element? {
+        return (0..<count).contains(index) ? self[index] : nil
+    }
+    
+    public func object(at index:Int) -> Element? {
+        return (0..<count).contains(index) ? self[index] : nil
     }
 }
 
