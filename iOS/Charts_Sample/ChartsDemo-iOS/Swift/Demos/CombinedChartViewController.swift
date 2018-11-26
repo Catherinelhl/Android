@@ -81,7 +81,7 @@ class CombinedChartViewController: DemoBaseViewController {
     func setChartData() {
         let data = CombinedChartData()
         data.lineData = generateLineData()
-//        data.barData = generateBarData()
+        data.barData = generateBarData()
 //        data.bubbleData = generateBubbleData()
 //        data.scatterData = generateScatterData()
         data.candleData = generateCandleData()

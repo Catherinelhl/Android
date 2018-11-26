@@ -47,18 +47,20 @@ class KLineView: UIView {
         
         let xAxis = combinedChartView.xAxis
         xAxis.labelPosition = .bottom
-        xAxis.enabled = false
+        xAxis.drawLabelsEnabled = false
+        xAxis.drawGridLinesEnabled = false
         
         let leftAxis = combinedChartView.leftAxis
         leftAxis.drawLabelsEnabled = false
-        leftAxis.gridLineDashLengths = [5.0,5.0]
+        leftAxis.drawGridLinesEnabled = false
         
         let rightAxis = combinedChartView.rightAxis
         rightAxis.labelPosition = .insideChart
         rightAxis.gridLineDashLengths = [5.0,5.0]
         
-        
-        combinedChartView.legend.drawInside = true
+        let legend = combinedChartView.legend
+        legend.drawInside = true
+        legend.verticalAlignment = .top
         
         combinedChartView.delegate = self
         self.addSubview(combinedChartView)
@@ -71,24 +73,22 @@ class KLineView: UIView {
         barChartView.scaleYEnabled = false
         barChartView.chartDescription?.enabled = false
         barChartView.doubleTapToZoomEnabled = false
-//        let highLighter = Highlight()
-//        highLighter.drawY = 0.7
-//        barChartView.highlighter = BarHighLightLine()
         
         let xAxis = barChartView.xAxis
         xAxis.labelPosition = .bottom
         xAxis.drawGridLinesEnabled = false
-//        xAxis.valueFormatter = DateValueFormatter()
         
         let leftAxis = barChartView.leftAxis
         leftAxis.drawLabelsEnabled = false
-        leftAxis.gridLineDashLengths = [5.0,5.0]
+        leftAxis.drawGridLinesEnabled = false
         
         let rightAxis = barChartView.rightAxis
         rightAxis.labelPosition = .insideChart
         rightAxis.gridLineDashLengths = [5.0,5.0]
         
         barChartView.legend.enabled = false
+        
+        barChartView.renderer = KLineBarChartDataRenderer.init(dataProvider: barChartView, animator: barChartView.chartAnimator, viewPortHandler: barChartView.viewPortHandler)
         
         barChartView.delegate = self
         self.addSubview(barChartView)
@@ -104,7 +104,7 @@ class KLineView: UIView {
         
         combinedChartView.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(barChartView.snp.top)
+            make.bottom.equalTo(barChartView.snp.top).offset(15)
         }
     }
     
@@ -130,6 +130,7 @@ class KLineView: UIView {
         
         let scaleX = combinedData.xMax >= 50 ? CGFloat(combinedData.xMax / 50) : 1
         combinedChartView.zoom(scaleX: scaleX , scaleY: 1, xValue: combinedData.xMax, yValue: combinedData.yMax, axis: .left)
+        combinedChartView.setVisibleXRangeMinimum(7)
         
 //        let srcMatrix = combinedChartView.viewPortHandler.touchMatrix
 //        combinedChartView.viewPortHandler.refresh(newMatrix: srcMatrix, chart: combinedChartView, invalidate: true)
@@ -148,6 +149,7 @@ class KLineView: UIView {
         
         let scaleX = barData.xMax >= 50 ? CGFloat(barData.xMax / 50) : 1
         barChartView.zoom(scaleX: scaleX , scaleY: 1, xValue: barData.xMax, yValue: barData.yMax, axis: .left)
+        barChartView.setVisibleXRangeMinimum(7)
         
 //        let srcMatrix = barChartView.viewPortHandler.touchMatrix
 //        barChartView.viewPortHandler.refresh(newMatrix: srcMatrix, chart: barChartView, invalidate: true)
@@ -278,18 +280,17 @@ class KLineView: UIView {
     private func showMarkView(value:String) {
         let marker = MarkerView.init(frame: CGRect(x: 0, y: 0, width: 120, height: 90))
         marker.chartView = self.combinedChartView
-        let label = UILabel.init(frame: CGRect(x: 0, y: 0, width: 120, height: 90))
+        let label = UILabel.init(frame: CGRect(x: 5, y: 0, width: 110, height: 90))
         label.numberOfLines = 0
         label.text = value
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 12)
-        label.backgroundColor = .gray
-//        label.textAlignment = .center
         marker.addSubview(label)
+        marker.backgroundColor = .gray
         self.combinedChartView.marker = marker
     }
 }
-
+// MARK: - 图表代理方法
 extension KLineView : ChartViewDelegate {
     
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
@@ -299,22 +300,22 @@ extension KLineView : ChartViewDelegate {
             let jsonArray = JSON(data[Int(candleEntry.x)])
 
             let open = jsonArray[1].stringValue.nsDecimalValue
-            let openString = "开:\(open.stringValue)" + "\n"
+            let openString = "开盘:\(open.stringValue)" + "\n"
             MyLog(openString)
             value += openString
 
             let close = jsonArray[4].stringValue.nsDecimalValue
-            let closeString = "收:\(close.stringValue)" + "\n"
+            let closeString = "收盘:\(close.stringValue)" + "\n"
             MyLog(closeString)
             value += closeString
 
             let high = jsonArray[2].stringValue.nsDecimalValue
-            let highString = "高:\(high.stringValue)" + "\n"
+            let highString = "最高:\(high.stringValue)" + "\n"
             MyLog(highString)
             value += highString
 
             let low = jsonArray[3].stringValue.nsDecimalValue
-            let lowString = "低:\(low.stringValue)" + "\n"
+            let lowString = "最低:\(low.stringValue)" + "\n"
             MyLog(lowString)
             value += lowString
 
