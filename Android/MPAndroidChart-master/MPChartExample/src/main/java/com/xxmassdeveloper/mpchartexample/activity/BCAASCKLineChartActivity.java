@@ -62,6 +62,8 @@ public class BCAASCKLineChartActivity extends DemoBase
     private BarChart chartBar;
     private int count;
     private List<KLineBean> kLineBeans = new ArrayList<>();
+    private List<String> fiveLineData = new ArrayList<>();
+    private List<String> thirtyLineData = new ArrayList<>();
 
     private BcaasCChartContract.Presenter presenter;
 
@@ -102,7 +104,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         l.setDrawInside(false);
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
@@ -115,6 +116,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         xAxis.setGranularity(1f);
         CombinedData data = new CombinedData();
         data.setData(generateKLineData());
+        data.setData(generateLineData());
         data.setValueTypeface(tfLight);
 
         xAxis.setAxisMaximum(data.getXMax() + 0.35f);
@@ -195,53 +197,93 @@ public class BCAASCKLineChartActivity extends DemoBase
     }
 
     private LineData generateLineData() {
+        calculateLineData();
+        calculateThirtyDayLineData();
         ArrayList<Entry> entries = new ArrayList<>();
         ArrayList<Entry> entries2 = new ArrayList<>();
         ArrayList<Entry> entries3 = new ArrayList<>();
 
-        for (int index = 0; index < count; index++) {
+        for (int index = 0; index < kLineBeans.size(); index++) {
             //range是控制曲线度，start是起点
-            float a = getRandom(1, 1);
-            float b = getRandom(2, 1);
-            float c = getRandom(3, 1);
-//            System.out.println("this random is:" + a);
-            entries.add(new Entry(index, a));
-            entries2.add(new Entry(index, b));
-            entries3.add(new Entry(index, c));
+            if (index % 5 == 0) {
+                if (index != 0) {
+                    LogTool.d(TAG,fiveLineData.get(index / 5));
+                    entries.add(new Entry(index, Float.valueOf(fiveLineData.get(index / 5))));
+                }
+            }
+//            entries3.add(new Entry(index, c));
         }
-        LineDataSet set = new LineDataSet(entries, "Line");
+        for (int index = 0; index < kLineBeans.size(); index++) {
+            if (index % 30 == 0) {
+                if (index != 0) {
+                    //range是控制曲线度，start是起点
+                    entries2.add(new Entry(index, Float.valueOf(thirtyLineData.get(index / 30))));
+                }
+            }
+//            entries3.add(new Entry(index, c));
+        }
+        LineDataSet set = new LineDataSet(entries, "MD5");
         set.setColor(Color.RED);
-        set.setLineWidth(1.5f);
-        set.setCircleColor(Color.BLACK);
-        set.setCircleRadius(2f);
-        set.setFillColor(Color.BLACK);
+        set.setLineWidth(1f);
+        set.setCircleColor(Color.RED);
+        set.setCircleRadius(1f);
+        set.setFillColor(Color.RED);
         set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         set.setDrawValues(true);
         set.setValueTextSize(8f);
         set.setValueTextColor(Color.BLACK);
 
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+//        set.setAxisDependency(YAxis.AxisDependency.LEFT);
 
 
-        LineDataSet set2 = new LineDataSet(entries2, "Line2");
-        set2.setColor(Color.GREEN);
-        set2.setLineWidth(1.5f);
-        set2.setCircleColor(Color.BLACK);
-        set2.setCircleRadius(2f);
-        set2.setFillColor(Color.GREEN);
+        LineDataSet set2 = new LineDataSet(entries2, "MD30");
+        set2.setColor(Color.YELLOW);
+        set2.setLineWidth(1f);
+        set2.setCircleColor(Color.YELLOW);
+        set2.setCircleRadius(1f);
+        set2.setFillColor(Color.YELLOW);
         set2.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         set2.setDrawValues(true);
         set2.setValueTextSize(8f);
         set2.setValueTextColor(Color.BLACK);
 
-        set2.setAxisDependency(YAxis.AxisDependency.LEFT);
+//        set2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         LineData d = new LineData(set, set2);
-
         // create a data object with the data sets
         d.setValueTextColor(Color.BLACK);
         d.setValueTextSize(8f);
         return d;
+    }
+
+    /**
+     * 计算当前的曲线图
+     * 首先以5天为单位
+     */
+    private void calculateLineData() {
+        float data = 0.0f;
+        for (int i = 0; i < kLineBeans.size(); i++) {
+            if (i % 5 == 0) {
+                fiveLineData.add(String.valueOf(data / 5));
+                data = 0.0f;
+            }
+            data += Float.valueOf(kLineBeans.get(i).getClose());
+        }
+    }
+
+    /**
+     * 计算当前的曲线图
+     * 首先以30天为单位
+     */
+    private void calculateThirtyDayLineData() {
+        float data = 0.0f;
+        for (int i = 0; i < kLineBeans.size(); i++) {
+            if (i % 30 == 0) {
+                thirtyLineData.add(String.valueOf(data / 30));
+                data = 0.0f;
+            }
+            data += Float.valueOf(kLineBeans.get(i).getClose());
+        }
     }
 
     /**

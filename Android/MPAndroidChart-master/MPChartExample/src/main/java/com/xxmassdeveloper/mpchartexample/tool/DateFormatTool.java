@@ -12,7 +12,7 @@ import java.util.TimeZone;
  */
 public class DateFormatTool {
 
-    private final static String DATETIMEFORMAT = "yy/MM/dd";
+    private final static String DATETIMEFORMAT = "yy/MM/dd HH";
     // Coordinated Universal Time
     private final static String TIMEZONE_UTC = "UTC";
     //取得当前时间
