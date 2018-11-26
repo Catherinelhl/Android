@@ -1,4 +1,4 @@
-package com.xxmassdeveloper.mpchartexample.activity;
+package bcaasc.io.chartdemo.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,7 +8,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-
+import bcaasc.io.chartdemo.R;
+import bcaasc.io.chartdemo.bean.KLineBean;
+import bcaasc.io.chartdemo.contract.BcaasCChartContract;
+import bcaasc.io.chartdemo.presenter.BcaasCChartPresenterImp;
+import bcaasc.io.chartdemo.tool.BcaasMarkerView;
+import bcaasc.io.chartdemo.tool.BcaasValueFormatter;
+import bcaasc.io.chartdemo.tool.DemoBase;
+import bcaasc.io.chartdemo.tool.LogTool;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
@@ -16,33 +23,12 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.CandleData;
-import com.github.mikephil.charting.data.CandleDataSet;
-import com.github.mikephil.charting.data.CandleEntry;
-import com.github.mikephil.charting.data.CombinedData;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.xxmassdeveloper.mpchartexample.R;
-import com.xxmassdeveloper.mpchartexample.bean.KLineBean;
-import com.xxmassdeveloper.mpchartexample.contract.BcaasCChartContract;
-import com.xxmassdeveloper.mpchartexample.custom.BcaasMarkerView;
-import com.xxmassdeveloper.mpchartexample.custom.BcaasValueFormatter;
-import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter;
-import com.xxmassdeveloper.mpchartexample.custom.MyValueFormatter;
-import com.xxmassdeveloper.mpchartexample.custom.XYMarkerView;
-import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
-import com.xxmassdeveloper.mpchartexample.presenter.BcaasCChartPresenterImp;
-import com.xxmassdeveloper.mpchartexample.tool.LogTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,9 +137,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         chartBar.setPinchZoom(false);
 
         chartBar.setDrawGridBackground(false);
-        // chart.setDrawYLabels(false);
-
-        ValueFormatter xAxisFormatter = new DayAxisValueFormatter(chartBar);
 
         //设置下坐标
         XAxis xAxis = chartBar.getXAxis();
@@ -369,45 +352,12 @@ public class BCAASCKLineChartActivity extends DemoBase
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.combined, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.viewGithub: {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/CombinedChartActivity.java"));
-                startActivity(i);
-                break;
-            }
-            case R.id.actionToggleLineValues: {
-                for (IDataSet set : chart.getData().getDataSets()) {
-                    if (set instanceof LineDataSet)
-                        set.setDrawValues(!set.isDrawValuesEnabled());
-                }
-
-                chart.invalidate();
-                break;
-            }
-            case R.id.actionToggleBarValues: {
-                for (IDataSet set : chart.getData().getDataSets()) {
-                    if (set instanceof BarDataSet)
-                        set.setDrawValues(!set.isDrawValuesEnabled());
-                }
-
-                chart.invalidate();
-                break;
-            }
-            case R.id.actionRemoveDataSet: {
-                int rnd = (int) getRandom(chart.getData().getDataSetCount(), 0);
-                chart.getData().removeDataSet(chart.getData().getDataSetByIndex(rnd));
-                chart.getData().notifyDataChanged();
-                chart.notifyDataSetChanged();
-                chart.invalidate();
-                break;
-            }
         }
         return true;
     }

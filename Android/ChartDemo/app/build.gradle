@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "bcaasc.io.chartdemo"
+        minSdkVersion 20
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation project(':MPChartLib')
+
+
+    /*Android 支持 Rxjava*/
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+
+    /*Gson 数据格式支持*/
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    /*网络请求框架，基于OKHttp的封装*/
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+
+    /*retrofit的Calladapter支持Rxjava*/
+    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+
+    /*retrofit 数据转换器*/
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+
+    /*Android方法数methods超过65536*/
+    implementation 'com.android.support:multidex:1.0.3'
+}
