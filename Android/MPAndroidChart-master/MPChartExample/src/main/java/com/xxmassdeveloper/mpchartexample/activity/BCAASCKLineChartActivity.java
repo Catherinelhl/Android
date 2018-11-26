@@ -35,6 +35,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.xxmassdeveloper.mpchartexample.R;
 import com.xxmassdeveloper.mpchartexample.bean.KLineBean;
 import com.xxmassdeveloper.mpchartexample.contract.BcaasCChartContract;
+import com.xxmassdeveloper.mpchartexample.custom.BcaasValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.MyValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.XYMarkerView;
@@ -104,23 +105,14 @@ public class BCAASCKLineChartActivity extends DemoBase
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-//        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-//        leftAxis.setAxisMaximum(0.05f); // this replaces setStartAtZero(true)
-
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTH_SIDED);
-        xAxis.setAxisMinimum(0f);
+        if (kLineBeans != null && kLineBeans.size() > 0) {
+            ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
+            xAxis.setValueFormatter(custom);
+        }
         xAxis.setGranularity(1f);
-//        xAxis.setValueFormatter(new ValueFormatter() {
-//            @Override
-//            public String getFormattedValue(float value) {
-//                return months[(int) value % months.length];
-//            }
-//        });
-
         CombinedData data = new CombinedData();
-
-//        data.setData(generateLineData());
         data.setData(generateKLineData());
         data.setValueTypeface(tfLight);
 
@@ -141,7 +133,7 @@ public class BCAASCKLineChartActivity extends DemoBase
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
-        chartBar.setMaxVisibleValueCount(60);
+//        chartBar.setMaxVisibleValueCount(60);
 
         // scaling can now only be done on x- and y-axis separately
         chartBar.setPinchZoom(false);
@@ -151,8 +143,13 @@ public class BCAASCKLineChartActivity extends DemoBase
 
         ValueFormatter xAxisFormatter = new DayAxisValueFormatter(chartBar);
 
+        //设置下坐标
         XAxis xAxis = chartBar.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
+        if (kLineBeans != null && kLineBeans.size() > 0) {
+            ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
+            xAxis.setValueFormatter(custom);
+        }
         xAxis.setTypeface(tfLight);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
@@ -170,7 +167,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         rightAxis.setDrawGridLines(false);
         rightAxis.setTypeface(tfLight);
         rightAxis.setLabelCount(8, false);
-//        rightAxis.setValueFormatter(custom);
+
         rightAxis.setSpaceTop(15f);
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
@@ -261,8 +258,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             for (int index = 0; index < count; index++) {
                 entries.add(new BarEntry(index, Float.valueOf(kLineBeans.get(index).getVolume())));
             }
-
-
             set = new BarDataSet(entries, "ETHBTC");
             set.setColor(Color.rgb(60, 220, 78));
             set.setValueTextColor(Color.rgb(60, 220, 78));
@@ -400,10 +395,8 @@ public class BCAASCKLineChartActivity extends DemoBase
             kLineBean.setTakerBuyBaseAssetVolume(childKLineData.get(9));
             kLineBean.setTakerBuyQuoteAssetVolume(childKLineData.get(10));
             kLineBean.setIgnore(childKLineData.get(11));
-            LogTool.d(TAG, kLineBean);
             kLineBeans.add(kLineBean);
         }
-        LogTool.d(TAG, kLineBeans);
         count = kLineBeans.size();
         LogTool.d(TAG, count);
         initChart();
