@@ -1,5 +1,7 @@
 package com.xxmassdeveloper.mpchartexample.presenter;
 
+import android.os.Build;
+
 import com.xxmassdeveloper.mpchartexample.contract.BcaasCChartContract;
 import com.xxmassdeveloper.mpchartexample.http.BcaasCInteractor;
 import com.xxmassdeveloper.mpchartexample.tool.LogTool;
@@ -10,6 +12,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.RequiresApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,16 +36,24 @@ public class BcaasCChartPresenterImp implements BcaasCChartContract.Presenter {
     public void getKLine() {
         String symbol = "ETHBTC";
         String interval = "1h";
+
+//        long endTime = System.currentTimeMillis();
+//        long startTime = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
         interactor.getKLine(symbol, interval, new Callback<String>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                LogTool.d(TAG, response.body());
                 try {
                     JSONArray jsonArray = new JSONArray(response.body());
                     List<List<String>> allKLineData = new ArrayList<>();
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        List<String> childContent = (List<String>) jsonArray.get(i);
+                        JSONArray jsonArray1 = (JSONArray) jsonArray.get(i);
+                        List<String> childContent = new ArrayList<>();
+                        for (int j = 0; j < jsonArray1.length(); j++) {
+                            childContent.add(String.valueOf(jsonArray1.get(j)));
+                        }
                         allKLineData.add(childContent);
+
                     }
                     view.getKLineSuccess(allKLineData);
                 } catch (JSONException e) {

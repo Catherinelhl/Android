@@ -22,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
         setTitle("MPAndroidChart Example");
         // initialize the utilities
         Utils.init(this);
+        findViewById(R.id.btn_kline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, BCAASCKLineChartActivity.class);
+                startActivity(intent);
+            }
+        });
         findViewById(R.id.btn_single).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -9,5 +9,10 @@ public interface HttpApi {
 
     /*获取交易记录*/
     @GET("/api/v1/klines")
+    Call<String> getKLines(@Query("symbol") String symbol, @Query("interval") String interval,
+                           @Query("startTime") long startTime, @Query("endTime") long endTime);
+
+    /*获取交易记录*/
+    @GET("/api/v1/klines")
     Call<String> getKLines(@Query("symbol") String symbol, @Query("interval") String interval);
 }

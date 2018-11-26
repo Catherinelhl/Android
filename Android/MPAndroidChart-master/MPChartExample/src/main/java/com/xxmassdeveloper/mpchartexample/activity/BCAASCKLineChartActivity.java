@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.xxmassdeveloper.mpchartexample.R;
@@ -46,12 +47,14 @@ import java.util.List;
 
 /**
  * 多数据
+ * <p>
+ * 接入币安真实数据
  */
 
-public class BCAASCMultiChartActivity extends DemoBase
+public class BCAASCKLineChartActivity extends DemoBase
         implements OnChartValueSelectedListener, BcaasCChartContract.View {
 
-    private String TAG = BCAASCMultiChartActivity.class.getSimpleName();
+    private String TAG = BCAASCKLineChartActivity.class.getSimpleName();
 
     private CombinedChart chart;
     private BarChart chartBar;
@@ -74,7 +77,7 @@ public class BCAASCMultiChartActivity extends DemoBase
     private void initView() {
         presenter = new BcaasCChartPresenterImp(this);
         presenter.getKLine();
-        setTitle("BCAASCMultiChartActivity");
+        setTitle("BCAASCKLineChartActivity");
         chart = findViewById(R.id.chart1);
         chartBar = findViewById(R.id.chart_bar);
 
@@ -85,18 +88,10 @@ public class BCAASCMultiChartActivity extends DemoBase
         chart.setDrawGridBackground(false);
         chart.setDrawBarShadow(false);
         chart.setHighlightFullBarEnabled(false);
-//        chart.setOnDragListener(new View.OnDragListener() {
-//            @Override
-//            public boolean onDrag(View v, DragEvent event) {
-//                return false;
-//            }
-//        });
-
         // draw bars behind lines
         chart.setDrawOrder(new DrawOrder[]{
                 DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.CANDLE, DrawOrder.LINE, DrawOrder.SCATTER
         });
-
         Legend l = chart.getLegend();
         l.setWordWrapEnabled(true);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -109,29 +104,30 @@ public class BCAASCMultiChartActivity extends DemoBase
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        leftAxis.setAxisMaximum(0.05f); // this replaces setStartAtZero(true)
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTH_SIDED);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return months[(int) value % months.length];
-            }
-        });
+//        xAxis.setValueFormatter(new ValueFormatter() {
+//            @Override
+//            public String getFormattedValue(float value) {
+//                return months[(int) value % months.length];
+//            }
+//        });
 
         CombinedData data = new CombinedData();
 
-        data.setData(generateLineData());
-//        data.setData(generateBarData());
+//        data.setData(generateLineData());
         data.setData(generateKLineData());
         data.setValueTypeface(tfLight);
 
         xAxis.setAxisMaximum(data.getXMax() + 0.35f);
         chart.setData(data);
         chart.invalidate();
+        chart.setAutoScaleMinMaxEnabled(true);
     }
 
 
@@ -160,15 +156,7 @@ public class BCAASCMultiChartActivity extends DemoBase
         xAxis.setTypeface(tfLight);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
-//        xAxis.setLabelCount(7);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return months[(int) value % months.length];
-            }
-        });
-
-        ValueFormatter custom = new MyValueFormatter("$");
+        xAxis.setLabelCount(7);
 
         YAxis leftAxis = chartBar.getAxisLeft();
         leftAxis.setTypeface(tfLight);
@@ -192,10 +180,15 @@ public class BCAASCMultiChartActivity extends DemoBase
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         l.setDrawInside(false);
         l.setForm(Legend.LegendForm.SQUARE);
+        l.setFormSize(9f);
+        l.setTextSize(11f);
+        l.setXEntrySpace(4f);
 
         XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
         mv.setChartView(chartBar); // For bounds control
         chartBar.setMarker(mv); // Set the marker to the chart
+        chartBar.setAutoScaleMinMaxEnabled(true);
+
         generateBarData();
     }
 
@@ -241,20 +234,6 @@ public class BCAASCMultiChartActivity extends DemoBase
 
         set2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-
-//        LineDataSet set3 = new LineDataSet(entries3, "Line3");
-//        set3.setColor(Color.BLUE);
-//        set3.setLineWidth(1.0f);
-//        set3.setCircleColor(Color.BLACK);
-//        set3.setCircleRadius(2f);
-//        set3.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//        set3.setDrawCircleHole(false);
-////        set2.setDrawValues(true);
-//        set3.setValueTextSize(10f);
-//        set3.setValueTextColor(Color.WHITE);
-//
-//        set3.setAxisDependency(YAxis.AxisDependency.LEFT);
-
         LineData d = new LineData(set, set2);
 
         // create a data object with the data sets
@@ -269,67 +248,38 @@ public class BCAASCMultiChartActivity extends DemoBase
      * @return
      */
     private void generateBarData() {
-        BarDataSet set1, set2;
-        ArrayList<BarEntry> entries1 = new ArrayList<>();
-        ArrayList<BarEntry> entries2 = new ArrayList<>();
+        BarDataSet set;
+        ArrayList<BarEntry> entries = new ArrayList<>();
 
         if (chartBar.getData() != null && chartBar.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) chartBar.getData().getDataSetByIndex(0);
-            set2 = (BarDataSet) chartBar.getData().getDataSetByIndex(1);
-            set1.setValues(entries1);
-            set2.setValues(entries1);
+            set = (BarDataSet) chartBar.getData().getDataSetByIndex(0);
+            set.setValues(entries);
             chartBar.getData().notifyDataChanged();
             chartBar.notifyDataSetChanged();
         } else {
 
-
             for (int index = 0; index < count; index++) {
-                float a = getRandom(1, 1);
-                float b = getRandom(2, 1);
-                entries1.add(new BarEntry(0, a));
-                entries2.add(new BarEntry(0, b));
-                // stacked
-//            entries2.add(new BarEntry(index, new float[]{getRandom(1, 1), getRandom(1, 1)}));
+                entries.add(new BarEntry(index, Float.valueOf(kLineBeans.get(index).getVolume())));
             }
 
-            set1 = new BarDataSet(entries1, "Bar 1");
-            set1.setColor(Color.rgb(60, 220, 78));
-            set1.setValueTextColor(Color.rgb(60, 220, 78));
-            set1.setValueTextSize(10f);
-            set1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-            set2 = new BarDataSet(entries2, "Bar 2");
-//        set2.setStackLabels(new String[]{"Stack 1", "Stack 2"});
-            set2.setColors(Color.rgb(61, 165, 255));
-            set2.setValueTextColor(Color.rgb(61, 165, 255));
-            set2.setValueTextSize(8f);
-            set2.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-
-            BarData data = new BarData(set1, set2);
+            set = new BarDataSet(entries, "ETHBTC");
+            set.setColor(Color.rgb(60, 220, 78));
+            set.setValueTextColor(Color.rgb(60, 220, 78));
+            set.setValueTextSize(10f);
+            set.setAxisDependency(YAxis.AxisDependency.LEFT);
+            BarData data = new BarData();
+            data.addDataSet(set);
             data.setValueFormatter(new LargeValueFormatter());
             data.setValueTypeface(tfLight);
+
+            data.setBarWidth(0.9f);
 
             chartBar.setData(data);
 
         }
 
 
-        float groupSpace = 0.06f;
-        float barSpace = 0.02f; // x2 dataset
-        float barWidth = 0.435f; // x2 dataset
-        // (0.45 + 0.02) * 2 + 0.06 = 1.00 -> interval per "group"
-
-        // specify the width each bar should have
-        chartBar.getBarData().setBarWidth(barWidth);
-
-        // restrict the x-axis range
-        chartBar.getXAxis().setAxisMinimum(0);
-        // make this BarData object grouped
-//        data.groupBars(0, groupSpace, barSpace); // start at x = 0
-        // barData.getGroupWith(...) is a helper that calculates the width each group needs based on the provided parameters
-        chartBar.getXAxis().setAxisMaximum(0 + chartBar.getBarData().getGroupWidth(groupSpace, barSpace) * count + 1);
-        chartBar.groupBars(0, groupSpace, barSpace);
         chartBar.invalidate();
     }
 
@@ -344,38 +294,11 @@ public class BCAASCMultiChartActivity extends DemoBase
         CandleData d = new CandleData();
 
         ArrayList<CandleEntry> entries = new ArrayList<>();
-
         for (int index = 0; index < count; index++) {
-
-            float baseValue = (float) (Math.random() * 5) + 5;
-
-            float open = (float) (Math.random() * 1);//开盘的随机数
-            float close = (float) (Math.random() * 1);//收盘的随机数
-
-            //是否跌
-            boolean isFall = index % 2 == 0;
-
-            //如果当前跌了，那么就用基数+开盘随机数，否是减去开盘随机数来得到当前的开盘数
-            float openingPrice = isFall ? baseValue + open : baseValue - open;
-            //如果当前跌了，那么收盘的数据一定是小于开盘的，那么就用基数-收盘随机数，否则加上收盘随机数来得到当前的收盘数
-            float closingPrice = isFall ? baseValue - close : baseValue + close;
-
-            //如果今天是跌了，那么就会采用openingPrice 为图的top，并且表现为红色；如果今天是涨了，那么就表示为绿色
-            float maxOfTime = (isFall ? openingPrice : closingPrice) + (float) (Math.random() * 1);
-            float minOfTime = (isFall ? closingPrice : openingPrice) - (float) (Math.random() * 1);
-
-//            //基值
-//            System.out.println("val:base:" + baseValue);
-//            //时间段上升的最高值
-//            System.out.println("val:max:" + maxOfTime);
-//            //时间段下降的最高值
-//            System.out.println("val:min:" + minOfTime);
-//            System.out.println("val+openingPrice:" + isFall + openingPrice);
-//            System.out.println("val+closingPrice:" + isFall + closingPrice);
-            // getResources().getDrawable(R.drawable.star
-            entries.add(new CandleEntry(index + 0.4f, maxOfTime, minOfTime, openingPrice, closingPrice));
+            entries.add(new CandleEntry(index + 0.4f, Float.valueOf(kLineBeans.get(index).getHigh()), Float.valueOf(kLineBeans.get(index).getLow()),
+                    Float.valueOf(kLineBeans.get(index).getOpen()), Float.valueOf(kLineBeans.get(index).getClose())));
         }
-        CandleDataSet set = new CandleDataSet(entries, "Candle");
+        CandleDataSet set = new CandleDataSet(entries, "ETHBTC");
         //设置是否显示文字
 //        set.setDrawValues(false);
         //设置candle的宽度
@@ -482,6 +405,7 @@ public class BCAASCMultiChartActivity extends DemoBase
         }
         LogTool.d(TAG, kLineBeans);
         count = kLineBeans.size();
+        LogTool.d(TAG, count);
         initChart();
         initBarChart2();
 
