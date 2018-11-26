@@ -25,6 +25,16 @@ public class BcaasValueFormatter extends ValueFormatter {
 
     @Override
     public String getFormattedValue(float value) {
+        if (allKLine == null || allKLine.size() == 0) {
+            return mFormat.format(value);
+        } else {
+            try {
+                return DateFormatTool.getUTCDateForAMPMFormat(allKLine.get((int) value).getOpenTime());
+            } catch (Exception e) {
+                LogTool.e(TAG, e.getMessage());
+                e.printStackTrace();
+            }
+        }
         return mFormat.format(value);
     }
 
@@ -50,6 +60,17 @@ public class BcaasValueFormatter extends ValueFormatter {
 //        } else {
 //            return mFormat.format(value) + "dd";
 //        }
-        return null;
+        return mFormat.format(value);
+    }
+
+    public String getKLineData(float x) {
+        if (allKLine == null || allKLine.size() == 0) {
+            return getFormattedValue(x);
+        } else {
+            int value = (int) x;
+            KLineBean kLineBean = allKLine.get(value);
+            return "Open:" + kLineBean.getOpen() + "\nClose:" + kLineBean.getClose() + "\nHigh:" + kLineBean.getHigh() + "\nLow:" + kLineBean.getLow();
+        }
+
     }
 }

@@ -35,6 +35,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.xxmassdeveloper.mpchartexample.R;
 import com.xxmassdeveloper.mpchartexample.bean.KLineBean;
 import com.xxmassdeveloper.mpchartexample.contract.BcaasCChartContract;
+import com.xxmassdeveloper.mpchartexample.custom.BcaasMarkerView;
 import com.xxmassdeveloper.mpchartexample.custom.BcaasValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.DayAxisValueFormatter;
 import com.xxmassdeveloper.mpchartexample.custom.MyValueFormatter;
@@ -107,8 +108,8 @@ public class BCAASCKLineChartActivity extends DemoBase
         leftAxis.setDrawGridLines(false);
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTH_SIDED);
+        ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
         if (kLineBeans != null && kLineBeans.size() > 0) {
-            ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
             xAxis.setValueFormatter(custom);
         }
         xAxis.setGranularity(1f);
@@ -117,6 +118,10 @@ public class BCAASCKLineChartActivity extends DemoBase
         data.setValueTypeface(tfLight);
 
         xAxis.setAxisMaximum(data.getXMax() + 0.35f);
+
+        BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
+        mv.setChartView(chart); // For bounds control
+        chart.setMarker(mv); // Set the marker to the chart
         chart.setData(data);
         chart.invalidate();
         chart.setAutoScaleMinMaxEnabled(true);
@@ -146,8 +151,8 @@ public class BCAASCKLineChartActivity extends DemoBase
         //设置下坐标
         XAxis xAxis = chartBar.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
+        ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
         if (kLineBeans != null && kLineBeans.size() > 0) {
-            ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
             xAxis.setValueFormatter(custom);
         }
         xAxis.setTypeface(tfLight);
@@ -181,7 +186,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
 
-        XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
+        BcaasMarkerView mv = new BcaasMarkerView(this, custom, false);
         mv.setChartView(chartBar); // For bounds control
         chartBar.setMarker(mv); // Set the marker to the chart
         chartBar.setAutoScaleMinMaxEnabled(true);
