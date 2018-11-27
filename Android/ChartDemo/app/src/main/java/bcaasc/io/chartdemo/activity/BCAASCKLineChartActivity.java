@@ -1,12 +1,11 @@
 package bcaasc.io.chartdemo.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.WindowManager;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.KLineBean;
@@ -27,7 +26,8 @@ import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
@@ -65,11 +65,97 @@ public class BCAASCKLineChartActivity extends DemoBase
     }
 
     private void initView() {
+
         presenter = new BcaasCChartPresenterImp(this);
         presenter.getKLine();
         setTitle("BCAASCKLineChartActivity");
         chart = findViewById(R.id.chart1);
         chartBar = findViewById(R.id.chart_bar);
+        chart.setOnChartGestureListener(new OnChartGestureListener() {
+            @Override
+            public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartLongPressed(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartDoubleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartSingleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+            }
+
+            @Override
+            public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+                chartBar.getViewPortHandler().refresh(chart.getViewPortHandler().getMatrixTouch(), chartBar, true);
+            }
+
+            @Override
+            public void onChartTranslate(MotionEvent me, float dX, float dY) {
+                chartBar.getViewPortHandler().refresh(chart.getViewPortHandler().getMatrixTouch(), chartBar, true);
+
+            }
+        });
+        chartBar.setOnChartGestureListener(new OnChartGestureListener() {
+            @Override
+            public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartLongPressed(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartDoubleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartSingleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+            }
+
+            @Override
+            public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+                chart.getViewPortHandler().refresh(chartBar.getViewPortHandler().getMatrixTouch(), chart, true);
+
+            }
+
+            @Override
+            public void onChartTranslate(MotionEvent me, float dX, float dY) {
+                chart.getViewPortHandler().refresh(chartBar.getViewPortHandler().getMatrixTouch(), chart, true);
+
+            }
+        });
 
     }
 
@@ -183,7 +269,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         calculateThirtyDayLineData();
         ArrayList<Entry> entries = new ArrayList<>();
         ArrayList<Entry> entries2 = new ArrayList<>();
-        ArrayList<Entry> entries3 = new ArrayList<>();
 
         for (int index = 0; index < kLineBeans.size(); index++) {
             //range是控制曲线度，start是起点
@@ -193,7 +278,6 @@ public class BCAASCKLineChartActivity extends DemoBase
                     entries.add(new Entry(index, Float.valueOf(fiveLineData.get(index / 5))));
                 }
             }
-//            entries3.add(new Entry(index, c));
         }
         for (int index = 0; index < kLineBeans.size(); index++) {
             if (index % 30 == 0) {
@@ -202,7 +286,6 @@ public class BCAASCKLineChartActivity extends DemoBase
                     entries2.add(new Entry(index, Float.valueOf(thirtyLineData.get(index / 30))));
                 }
             }
-//            entries3.add(new Entry(index, c));
         }
         LineDataSet set = new LineDataSet(entries, "MD5");
         set.setColor(Color.RED);
@@ -215,9 +298,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         set.setValueTextSize(8f);
         set.setValueTextColor(Color.BLACK);
 
-//        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-
         LineDataSet set2 = new LineDataSet(entries2, "MD30");
         set2.setColor(Color.YELLOW);
         set2.setLineWidth(1f);
@@ -228,8 +308,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         set2.setDrawValues(true);
         set2.setValueTextSize(8f);
         set2.setValueTextColor(Color.BLACK);
-
-//        set2.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         LineData d = new LineData(set, set2);
         // create a data object with the data sets
@@ -357,8 +435,6 @@ public class BCAASCKLineChartActivity extends DemoBase
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        }
         return true;
     }
 
@@ -404,4 +480,6 @@ public class BCAASCKLineChartActivity extends DemoBase
     public void getKLineFailure(String failureInfo) {
 
     }
+
+
 }

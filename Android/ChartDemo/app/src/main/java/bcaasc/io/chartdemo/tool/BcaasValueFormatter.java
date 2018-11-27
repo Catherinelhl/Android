@@ -39,11 +39,16 @@ public class BcaasValueFormatter extends ValueFormatter {
         if (allKLine == null || allKLine.size() == 0) {
             return mFormat.format(value);
         } else {
-            try {
-                return DateFormatTool.getUTCDateForAMPMFormat(allKLine.get((int) value).getOpenTime());
-            } catch (Exception e) {
-                LogTool.e(TAG, e.getMessage());
-                e.printStackTrace();
+            int x = (int) value;
+            if (x < allKLine.size()) {
+                try {
+                    return DateFormatTool.getUTCDateForAMPMFormat(allKLine.get(x).getOpenTime());
+                } catch (Exception e) {
+                    LogTool.e(TAG, e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                return mFormat.format(value);
             }
         }
 //        } else if (value > 0) {
@@ -63,8 +68,13 @@ public class BcaasValueFormatter extends ValueFormatter {
             return getFormattedValue(x);
         } else {
             int value = (int) x;
-            KLineBean kLineBean = allKLine.get(value);
-            return "Open:" + kLineBean.getOpen() + "\nClose:" + kLineBean.getClose() + "\nHigh:" + kLineBean.getHigh() + "\nLow:" + kLineBean.getLow();
+            if (x < allKLine.size()) {
+                KLineBean kLineBean = allKLine.get(value);
+                return "Open:" + kLineBean.getOpen() + "\nClose:" + kLineBean.getClose() + "\nHigh:" + kLineBean.getHigh() + "\nLow:" + kLineBean.getLow();
+            } else {
+                return getFormattedValue(x);
+
+            }
         }
 
     }
