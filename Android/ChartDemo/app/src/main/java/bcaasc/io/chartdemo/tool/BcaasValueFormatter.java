@@ -70,7 +70,11 @@ public class BcaasValueFormatter extends ValueFormatter {
             int value = (int) x;
             if (x < allKLine.size()) {
                 KLineBean kLineBean = allKLine.get(value);
-                return "Open:" + kLineBean.getOpen() + "\nClose:" + kLineBean.getClose() + "\nHigh:" + kLineBean.getHigh() + "\nLow:" + kLineBean.getLow();
+                return "Open:" + kLineBean.getOpen() +
+                        "\nClose:" + kLineBean.getClose() +
+                        "\nHigh:" + kLineBean.getHigh() +
+                        "\nLow:" + kLineBean.getLow()+
+                        "\nVolume:" + kLineBean.getVolume();
             } else {
                 return getFormattedValue(x);
 

@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="3dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="6dp"
         android:gravity="left"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
 </RelativeLayout>
