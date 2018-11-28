@@ -3,7 +3,6 @@ package com.github.mikephil.charting.renderer;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleEntry;
@@ -11,12 +10,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.CandleDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointD;
-import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.Transformer;
-import com.github.mikephil.charting.utils.Utils;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.github.mikephil.charting.utils.*;
 
 import java.util.List;
 
@@ -57,8 +51,9 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
     protected void drawDataSet(Canvas c, ICandleDataSet dataSet) {
 
         Transformer trans = mChart.getTransformer(dataSet.getAxisDependency());
-
+        //视图的阶段位置。因为可能视图会伴有放大，缩小，坐标会相对应的变化
         float phaseY = mAnimator.getPhaseY();
+        float phaseX = mAnimator.getPhaseX();
         float barSpace = dataSet.getBarSpace();
         boolean showCandleBar = dataSet.getShowCandleBar();
 
@@ -66,6 +61,10 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
 
         mRenderPaint.setStrokeWidth(dataSet.getShadowWidth());
 
+        //计算最大值和最小值
+        float maxValue = 0, minValue = Float.MAX_VALUE;
+        int maxIndex = 0, minIndex = 0;
+        CandleEntry maxEntry = null, minEntry = null;
         // draw the body
         for (int j = mXBounds.min; j <= mXBounds.range + mXBounds.min; j++) {
 
@@ -81,10 +80,21 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
             final float close = e.getClose();
             final float high = e.getHigh();
             final float low = e.getLow();
+            //得到当前绘制视图的数据的最大值数据
+            if (maxValue < high) {
+                maxValue = high;
+                maxEntry = e;
+                maxIndex = j;
+            }
+            //得到当前绘制视图的数据的最小值数据
+            if (minValue > low) {
+                minValue = low;
+                minEntry = e;
+                minIndex = j;
+            }
 
             if (showCandleBar) {
                 // calculate the shadow
-
                 mShadowBuffers[0] = xPos;
                 mShadowBuffers[2] = xPos;
                 mShadowBuffers[4] = xPos;
@@ -250,6 +260,79 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                         mRenderPaint);
             }
         }
+
+        //绘制最大值和最小值
+        if (maxIndex > minIndex) {
+            //画右边
+            String highString = "← " + Float.toString(minValue);
+            //计算显示位置
+            //计算文本宽度
+            int highStringWidth = Utils.calcTextWidth(mValuePaint, highString);
+            int highStringHeight = Utils.calcTextHeight(mValuePaint, highString);
+
+            float[] tPosition = new float[2];
+            tPosition[0] = minIndex * phaseX;
+            tPosition[1] = minValue * phaseY;
+            trans.pointValuesToPixel(tPosition);
+            mValuePaint.setColor(dataSet.getValueTextColor(minIndex / 2));
+            c.drawText(highString, tPosition[0] + highStringWidth / 2, tPosition[1], mValuePaint);
+        } else {
+            //画左边
+            String highString = Float.toString(minValue) + " →";
+
+            //计算显示位置
+            int highStringWidth = Utils.calcTextWidth(mValuePaint, highString);
+            int highStringHeight = Utils.calcTextHeight(mValuePaint, highString);
+
+                    /*mValuePaint.setColor(dataSet.getValueTextColor(minIndex / 2));
+                    c.drawText(highString, x-highStringWidth/2, y+yOffset, mValuePaint);*/
+
+            float[] tPosition = new float[2];
+            tPosition[0] = minIndex * phaseX;
+            tPosition[1] = minValue * phaseY;
+            trans.pointValuesToPixel(tPosition);
+            mValuePaint.setColor(dataSet.getValueTextColor(minIndex / 2));
+            c.drawText(highString, tPosition[0] - highStringWidth / 2, tPosition[1], mValuePaint);
+        }
+
+        if (maxIndex > minIndex) {
+            //画左边
+            String highString = Float.toString(maxValue) + " →";
+
+            int highStringWidth = Utils.calcTextWidth(mValuePaint, highString);
+            int highStringHeight = Utils.calcTextHeight(mValuePaint, highString);
+
+            float[] tPosition = new float[2];
+            tPosition[0] = maxEntry == null ? 0f : maxEntry.getX();
+            tPosition[1] = maxEntry == null ? 0f : maxEntry.getHigh();
+            trans.pointValuesToPixel(tPosition);
+            System.out.println("---high-dataSet:" + tPosition[0] + "---self:" + maxIndex * phaseX);
+            mValuePaint.setColor(dataSet.getValueTextColor(maxIndex / 2));
+            //c.drawText(highString, x+highStringWidth , y-yOffset, mValuePaint);
+            c.drawText(highString, tPosition[0] - highStringWidth / 2, tPosition[1], mValuePaint);
+
+                    /*mValuePaint.setColor(dataSet.getValueTextColor(maxIndex / 2));
+                    c.drawText(highString, x - highStringWidth, y-yOffset, mValuePaint);*/
+        } else {
+            //画右边
+            String highString = "← " + Float.toString(maxValue);
+
+            //计算显示位置
+            int highStringWidth = Utils.calcTextWidth(mValuePaint, highString);
+            int highStringHeight = Utils.calcTextHeight(mValuePaint, highString);
+
+            float[] tPosition = new float[2];
+            tPosition[0] = maxEntry == null ? 0f : maxEntry.getX();
+            tPosition[1] = maxEntry == null ? 0f : maxEntry.getHigh();
+            trans.pointValuesToPixel(tPosition);
+            System.out.println("---high-dataSet:" + tPosition[0] + "---self:" + maxIndex * phaseX);
+
+            mValuePaint.setColor(dataSet.getValueTextColor(maxIndex / 2));
+            //c.drawText(highString, x+highStringWidth , y-yOffset, mValuePaint);
+            c.drawText(highString, tPosition[0] + highStringWidth / 2, tPosition[1], mValuePaint);
+
+        }
+
     }
 
     @Override
@@ -309,8 +392,8 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
                         Utils.drawImage(
                                 c,
                                 icon,
-                                (int)(x + iconsOffset.x),
-                                (int)(y + iconsOffset.y),
+                                (int) (x + iconsOffset.x),
+                                (int) (y + iconsOffset.y),
                                 icon.getIntrinsicWidth(),
                                 icon.getIntrinsicHeight());
                     }

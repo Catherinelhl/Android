@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.TextView;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.KLineBean;
 import bcaasc.io.chartdemo.contract.BcaasCChartContract;
@@ -15,6 +16,8 @@ import bcaasc.io.chartdemo.tool.BcaasMarkerView;
 import bcaasc.io.chartdemo.tool.BcaasValueFormatter;
 import bcaasc.io.chartdemo.tool.DemoBase;
 import bcaasc.io.chartdemo.tool.LogTool;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
@@ -42,10 +45,26 @@ import java.util.List;
 public class BCAASCKLineChartActivity extends DemoBase
         implements OnChartValueSelectedListener, BcaasCChartContract.View {
 
+    @BindView(R.id.tv_open)
+    TextView tvOpen;
+    @BindView(R.id.tv_high)
+    TextView tvHigh;
+    @BindView(R.id.tv_close)
+    TextView tvClose;
+    @BindView(R.id.tv_low)
+    TextView tvLow;
+    @BindView(R.id.tv_volume)
+    TextView tvVolume;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_timer)
+    TextView tvTimer;
+    @BindView(R.id.chart1)
+    CombinedChart chart;
+    @BindView(R.id.chart_bar)
+    BarChart chartBar;
     private String TAG = BCAASCKLineChartActivity.class.getSimpleName();
 
-    private CombinedChart chart;
-    private BarChart chartBar;
     private int count;
     private List<KLineBean> kLineBeans = new ArrayList<>();
     private List<String> fiveLineData = new ArrayList<>();
@@ -58,7 +77,8 @@ public class BCAASCKLineChartActivity extends DemoBase
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_bcaasc_mutilple);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         initView();
         initListener();
@@ -69,8 +89,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         presenter = new BcaasCChartPresenterImp(this);
         presenter.getKLine();
         setTitle("BCAASCKLineChartActivity");
-        chart = findViewById(R.id.chart1);
-        chartBar = findViewById(R.id.chart_bar);
 
     }
 
@@ -100,19 +118,25 @@ public class BCAASCKLineChartActivity extends DemoBase
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setDrawGridLines(true);
         // 设置不需要 Labels
-        rightAxis.setDrawLabels(false);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+
 
         //开始定制左轴
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
+        leftAxis.setDrawLabels(false);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+
 //        leftAxis.setMaxWidth(50f);
 
         //开始定制X轴
         XAxis xAxis = chart.getXAxis();
         //设置X轴的信息显示在底部
-//        xAxis.setPosition(XAxisPosition.BOTTOM);
+        xAxis.setPosition(XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
         // 设置不显示label
-//        xAxis.setDrawLabels(false);
+        xAxis.setDrawLabels(false);
         //设置不显示X轴的下标线
         xAxis.setDrawAxisLine(false);
 
@@ -177,22 +201,25 @@ public class BCAASCKLineChartActivity extends DemoBase
             xAxis.setValueFormatter(custom);
         }
         xAxis.setTypeface(tfLight);
-        xAxis.setDrawGridLines(true);
+        xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
         xAxis.setLabelCount(7);
 
         YAxis leftAxis = chartBar.getAxisLeft();
         leftAxis.setTypeface(tfLight);
         leftAxis.setLabelCount(8, false);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
         leftAxis.setSpaceTop(15f);
         leftAxis.setDrawGridLines(true);
+        leftAxis.setDrawLabels(false);
+
 
 //        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         YAxis rightAxis = chartBar.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        rightAxis.setDrawLabels(false);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 
         Legend l = chartBar.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
@@ -228,7 +255,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             //range是控制曲线度，start是起点
             if (index % 5 == 0) {
                 if (index != 0) {
-                    LogTool.d(TAG, fiveLineData.get(index / 5));
                     entries.add(new Entry(index, Float.valueOf(fiveLineData.get(index / 5))));
                 }
             }
