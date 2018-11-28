@@ -52,8 +52,8 @@ public class CombinedChartRenderer extends DataRenderer {
 
             switch (order) {
                 case BAR:
-                    if (chart.getBarData() != null)
-                        mRenderers.add(new BarChartRenderer(chart, mAnimator, mViewPortHandler));
+                if (chart.getBarData() != null)
+                    mRenderers.add(new BarChartRenderer(chart, mAnimator, mViewPortHandler));
                     break;
                 case BUBBLE:
                     if (chart.getBubbleData() != null)

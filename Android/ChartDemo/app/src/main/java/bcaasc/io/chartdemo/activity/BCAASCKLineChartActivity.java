@@ -7,14 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.TextView;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.KLineBean;
 import bcaasc.io.chartdemo.contract.BcaasCChartContract;
+import bcaasc.io.chartdemo.listener.ChartMarkerViewListener;
 import bcaasc.io.chartdemo.presenter.BcaasCChartPresenterImp;
-import bcaasc.io.chartdemo.tool.BcaasMarkerView;
-import bcaasc.io.chartdemo.tool.BcaasValueFormatter;
-import bcaasc.io.chartdemo.tool.DemoBase;
-import bcaasc.io.chartdemo.tool.LogTool;
+import bcaasc.io.chartdemo.tool.*;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
@@ -44,8 +45,25 @@ public class BCAASCKLineChartActivity extends DemoBase
 
     private String TAG = BCAASCKLineChartActivity.class.getSimpleName();
 
-    private CombinedChart chart;
-    private BarChart chartBar;
+    @BindView(R.id.tv_open)
+    TextView tvOpen;
+    @BindView(R.id.tv_high)
+    TextView tvHigh;
+    @BindView(R.id.tv_close)
+    TextView tvClose;
+    @BindView(R.id.tv_low)
+    TextView tvLow;
+    @BindView(R.id.tv_volume)
+    TextView tvVolume;
+    @BindView(R.id.tv_number)
+    TextView tvNumber;
+    @BindView(R.id.tv_timer)
+    TextView tvTimer;
+    @BindView(R.id.chart1)
+    CombinedChart chart;
+    @BindView(R.id.chart_bar)
+    BarChart chartBar;
+
     private int count;
     private List<KLineBean> kLineBeans = new ArrayList<>();
     private List<String> fiveLineData = new ArrayList<>();
@@ -58,7 +76,8 @@ public class BCAASCKLineChartActivity extends DemoBase
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_bcaasc_mutilple);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         initView();
         initListener();
@@ -69,24 +88,30 @@ public class BCAASCKLineChartActivity extends DemoBase
         presenter = new BcaasCChartPresenterImp(this);
         presenter.getKLine();
         setTitle("BCAASCKLineChartActivity");
-        chart = findViewById(R.id.chart1);
-        chartBar = findViewById(R.id.chart_bar);
 
     }
 
     private void initChart() {
-        chart.getDescription().setEnabled(false);
+        chart.getDescription().setEnabled(false);//右下角对图表的描述信息
         chart.setDrawGridBackground(false);
         chart.setDrawBarShadow(false);
-        //设置Y轴方向不能滑动
-        chart.setScaleYEnabled(false);
+        chart.setDrawBorders(true);//是否绘制边线
+        chart.setBorderWidth(1f);//边线宽度，单位dp
+        chart.setBorderColor(getResources().getColor(R.color.border_color));//边线颜色
+        chart.setHardwareAccelerationEnabled(true);//是否不开启硬件加速
+        chart.setMinOffset(0f);//设置上下内边距
+        chart.setExtraOffsets(10f, 0f, 10f, 0f);//图标周围格额外的偏移量
+//        chartBar.setExtraLeftOffset(10f);
+//        chartBar.setExtraRightOffset(10f);
+        chart.setDragEnabled(true);//启用图表拖拽事件
+        chart.setScaleYEnabled(false); //设置Y轴方向不能滑动
         chart.setHighlightFullBarEnabled(false);
-        // draw bars behind lines
-        chart.setDrawOrder(new DrawOrder[]{
-                DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.CANDLE, DrawOrder.LINE, DrawOrder.SCATTER
+        chart.setDrawOrder(new DrawOrder[]{// draw bars behind lines
+                DrawOrder.CANDLE, DrawOrder.LINE
         });
-        //设置颜色注释方位以及信息
-        Legend l = chart.getLegend();
+
+        Legend l = chart.getLegend();//主要控制左下方的图例的
+        l.setEnabled(true);//是否绘制 Legend 图例
         l.setWordWrapEnabled(true);
         //设置位于Chart上面
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -100,21 +125,28 @@ public class BCAASCKLineChartActivity extends DemoBase
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setDrawGridLines(true);
         // 设置不需要 Labels
-        rightAxis.setDrawLabels(false);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        rightAxis.enableGridDashedLine(10f, 10f, 0f); //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
+
 
         //开始定制左轴
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-//        leftAxis.setMaxWidth(50f);
+        leftAxis.setDrawLabels(false);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+//        leftAxis.setLabelCount(5, false); //第一个参数是Y轴坐标的个数，第二个参数是 是否不均匀分布，true是不均匀分布
 
-        //开始定制X轴
+        //X轴
         XAxis xAxis = chart.getXAxis();
         //设置X轴的信息显示在底部
-//        xAxis.setPosition(XAxisPosition.BOTTOM);
+        xAxis.setPosition(XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
         // 设置不显示label
-//        xAxis.setDrawLabels(false);
+        xAxis.setDrawLabels(false);
         //设置不显示X轴的下标线
         xAxis.setDrawAxisLine(false);
+        xAxis.enableGridDashedLine(10f, 10f, 0f);//绘制成虚线，只有在关闭硬件加速的情况下才能使用
 
         //自定义一个底部显示内容格式化
         ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
@@ -134,11 +166,13 @@ public class BCAASCKLineChartActivity extends DemoBase
         //设置字体
         data.setValueTypeface(tfLight);
 
-        //设置内容偏移量，否则第一个内容吗会被截掉
-        xAxis.setAxisMaximum(data.getXMax() + 0.35f);
+        //设置内容偏移量，否则first one & last one内容吗会被截掉
+        xAxis.setAxisMaximum(data.getXMax() + 0.5f);
+        xAxis.setAxisMinimum(data.getXMin() - 0.5f);
 
-        //设置内容显示期
+        //设置内容显示自定义数据
         BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
+        mv.setChartMarkerViewListener(chartMarkerViewListener);
         mv.setChartView(chart); // For bounds control
         chart.setMarker(mv); // Set the marker to the chart
         chart.setData(data);
@@ -156,8 +190,12 @@ public class BCAASCKLineChartActivity extends DemoBase
         chartBar.setDrawValueAboveBar(false);
         // 设置Y轴不可放大
         chartBar.setScaleYEnabled(false);
-
+        chartBar.setDrawBorders(true);//是否绘制边线
+        chartBar.setBorderWidth(1f);//边线宽度，单位dp
         chartBar.getDescription().setEnabled(false);
+        chartBar.setMinOffset(0f);//设置上下内边距
+        chartBar.setExtraOffsets(10f, 0f, 10f, 10f);//图标周围格额外的偏移量
+
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -176,24 +214,29 @@ public class BCAASCKLineChartActivity extends DemoBase
             xAxis.setValueFormatter(custom);
         }
         xAxis.setTypeface(tfLight);
-        xAxis.setDrawGridLines(true);
+        xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f); // only intervals of 1 day
         xAxis.setLabelCount(7);
 
         YAxis leftAxis = chartBar.getAxisLeft();
         leftAxis.setTypeface(tfLight);
-        leftAxis.setLabelCount(8, false);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        leftAxis.setSpaceTop(15f);
+//        leftAxis.setLabelCount(8, false);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+//        leftAxis.setSpaceTop(15f);
         leftAxis.setDrawGridLines(true);
+        leftAxis.setDrawLabels(false);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f); //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
+
 
 //        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         YAxis rightAxis = chartBar.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        rightAxis.setDrawLabels(false);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 
         Legend l = chartBar.getLegend();
+        l.setEnabled(false);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
@@ -201,13 +244,46 @@ public class BCAASCKLineChartActivity extends DemoBase
         l.setForm(Legend.LegendForm.SQUARE);
 
         BcaasMarkerView mv = new BcaasMarkerView(this, custom, false);
+        mv.setChartMarkerViewListener(chartMarkerViewListener);
         mv.setChartView(chartBar); // For bounds control
         chartBar.setMarker(mv); // Set the marker to the chart
         chartBar.setAutoScaleMinMaxEnabled(true);
         chartBar.setVisibleXRangeMinimum(5);
 
-        generateBarData();
+        BarData barData = generateBarData();
+        //如果当前是重新生成的BarData，那么就需要重新添加以及重新设置初始数据
+        if (barData != null) {
+            xAxis.setAxisMaximum(barData.getXMax() + 0.5f);
+            xAxis.setAxisMinimum(barData.getXMin() - 0.5f);
+            chartBar.setData(barData);
+        }
+        chartBar.invalidate();
+
     }
+
+    private ChartMarkerViewListener chartMarkerViewListener = new ChartMarkerViewListener() {
+        @Override
+        public void getKLineBean(Entry entry, Highlight highlight, KLineBean kLineBean) {
+
+        }
+
+        @Override
+        public void getIndex(int index) {
+            if (kLineBeans != null && kLineBeans.size() > 0) {
+                if (index < kLineBeans.size()) {
+                    KLineBean kLineBean = kLineBeans.get(index);
+                    //显示当前数据
+                    tvOpen.setText("Open: " + kLineBean.getOpen());
+                    tvClose.setText("Close: " + kLineBean.getClose());
+                    tvHigh.setText("High: " + kLineBean.getHigh());
+                    tvLow.setText("Low: " + kLineBean.getLow());
+                    tvVolume.setText("Volume: " + kLineBean.getVolume());
+                    tvNumber.setText("Number: " + kLineBean.getNumberOfTrades());
+                    tvTimer.setText("Time: " + DateFormatTool.getUTCDateForAMPMFormat(kLineBean.getOpenTime()));
+                }
+            }
+        }
+    };
 
     private LineData generateLineData() {
         calculateLineData();
@@ -219,7 +295,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             //range是控制曲线度，start是起点
             if (index % 5 == 0) {
                 if (index != 0) {
-                    LogTool.d(TAG, fiveLineData.get(index / 5));
                     entries.add(new Entry(index, Float.valueOf(fiveLineData.get(index / 5))));
                 }
             }
@@ -258,6 +333,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         // create a data object with the data sets
         d.setValueTextColor(Color.BLACK);
         d.setValueTextSize(8f);
+        d.setHighlightEnabled(false);
         return d;
     }
 
@@ -296,7 +372,7 @@ public class BCAASCKLineChartActivity extends DemoBase
      *
      * @return
      */
-    private void generateBarData() {
+    private BarData generateBarData() {
         BarDataSet set;
         ArrayList<BarEntry> entries = new ArrayList<>();
 
@@ -306,7 +382,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             chartBar.getData().notifyDataChanged();
             chartBar.notifyDataSetChanged();
         } else {
-
             for (int index = 0; index < count; index++) {
                 entries.add(new BarEntry(index, Float.valueOf(kLineBeans.get(index).getVolume())));
             }
@@ -320,15 +395,13 @@ public class BCAASCKLineChartActivity extends DemoBase
             data.addDataSet(set);
             data.setValueFormatter(new LargeValueFormatter());
             data.setValueTypeface(tfLight);
-
             data.setBarWidth(0.9f);
+            return data;
 
-            chartBar.setData(data);
 
         }
+        return null;
 
-
-        chartBar.invalidate();
     }
 
 
@@ -343,7 +416,7 @@ public class BCAASCKLineChartActivity extends DemoBase
 
         ArrayList<CandleEntry> entries = new ArrayList<>();
         for (int index = 0; index < count; index++) {
-            entries.add(new CandleEntry(index + 0.4f, Float.valueOf(kLineBeans.get(index).getHigh()), Float.valueOf(kLineBeans.get(index).getLow()),
+            entries.add(new CandleEntry(index, Float.valueOf(kLineBeans.get(index).getHigh()), Float.valueOf(kLineBeans.get(index).getLow()),
                     Float.valueOf(kLineBeans.get(index).getOpen()), Float.valueOf(kLineBeans.get(index).getClose())));
         }
         CandleDataSet set = new CandleDataSet(entries, "ETHBTC");
@@ -416,7 +489,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             kLineBeans.add(kLineBean);
         }
         count = kLineBeans.size();
-        LogTool.d(TAG, count);
         initChart();
         initBarChart2();
 
@@ -429,6 +501,60 @@ public class BCAASCKLineChartActivity extends DemoBase
 
 
     private void initListener() {
+        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                chartBar.highlightValue(h);
+                chartBar.invalidate();
+//                chartBar.getMarker().refreshContent(e,h);
+
+//                Highlight highlight = new Highlight(h.getXIndex(), h.getValue(), h.getDataIndex(), h.getDataSetIndex());
+//
+//                float touchY = h.getTouchY() - mChartPrice.getHeight();
+//                Highlight h1 = mChartVolume.getHighlightByTouchPoint(h.getXIndex(), touchY);
+//                highlight.setTouchY(touchY);
+//                if (null == h1) {
+//                    highlight.setTouchYValue(0);
+//                } else {
+//                    highlight.setTouchYValue(h1.getTouchYValue());
+//                }
+//                chartBar.highlightValues(new Highlight[]{highlight});
+            }
+
+            @Override
+            public void onNothingSelected() {
+                chartBar.highlightValue(null);
+            }
+        });
+
+        chartBar.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+//                Highlight highlight = new Highlight(h.getX(),h.getY(), h.getDataIndex(), h.getDataSetIndex());
+//                float touchY = h.getTouchY() + chart.getHeight();
+//                Highlight h1 = chart.getHighlightByTouchPoint(h.getX(), touchY);
+//                highlight.setTouchY(touchY);
+//                if (null == h1) {
+//                    highlight.setTouchYValue(0);
+//                } else {
+//                    highlight.setTouchYValue(h1.getTouchYValue());
+//                }
+                h.setDataIndex(1);
+                h.setmDataSetIndex(0);
+                chart.highlightValues(new Highlight[]{h});
+                chart.getMarker().refreshContent(e,h);
+                chart.notifyDataSetChanged();
+                chart.invalidate();
+            }
+
+            @Override
+            public void onNothingSelected() {
+                chart.highlightValue(null);
+            }
+        });
+
         chart.setOnChartGestureListener(new OnChartGestureListener() {
             @Override
             public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {

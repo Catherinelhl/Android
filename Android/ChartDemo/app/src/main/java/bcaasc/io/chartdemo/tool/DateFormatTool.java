@@ -27,7 +27,7 @@ public class DateFormatTool {
         return strDate;
     }
 
-    public static String getUTCDateForAMPMFormat(String timeStamp) throws Exception {
+    public static String getUTCDateForAMPMFormat(String timeStamp)  {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
