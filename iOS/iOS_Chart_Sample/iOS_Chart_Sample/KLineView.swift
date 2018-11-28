@@ -62,6 +62,8 @@ class KLineView: UIView {
         legend.drawInside = true
         legend.verticalAlignment = .top
         
+        combinedChartView.renderer = KLineCombinedChartRenderer(chart: combinedChartView, animator: combinedChartView.chartAnimator, viewPortHandler: combinedChartView.viewPortHandler)
+        
         combinedChartView.delegate = self
         self.addSubview(combinedChartView)
     }
@@ -247,7 +249,7 @@ class KLineView: UIView {
         return set
     }
     
-    private func getClosePriceArray(with data:[[Any]], days:Int) -> [(Int,Double)]{
+    private func getClosePriceArray(with data:[[Any]], days:Int) -> [(x:Int,y:Double)]{
         
         var closePriceArray = [(Int,Double)]()
         var daysClosePrice = 0.0
@@ -278,15 +280,24 @@ class KLineView: UIView {
     
     // MARK: 显示数据MarkView标签
     private func showMarkView(value:String) {
-        let marker = MarkerView.init(frame: CGRect(x: 0, y: 0, width: 120, height: 90))
+        let textSize = value.textSize(withFontSize: 12)
+        let marker = MarkerView.init(frame: CGRect(origin: .zero, size: CGSize(width: textSize.width + 20, height: textSize.height + 20)))
         marker.chartView = self.combinedChartView
-        let label = UILabel.init(frame: CGRect(x: 5, y: 0, width: 110, height: 90))
+        marker.backgroundColor = .clear
+        
+        let labelView = UIView.init(frame: CGRect(origin: CGPoint(x: 5, y: 5), size: CGSize(width: textSize.width + 10, height: textSize.height + 10)))
+        labelView.backgroundColor = .gray
+        
+        let label = UILabel.init(frame: CGRect(origin: CGPoint(x: 5, y: 5), size: textSize))
         label.numberOfLines = 0
         label.text = value
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 12)
-        marker.addSubview(label)
-        marker.backgroundColor = .gray
+        label.backgroundColor = .gray
+        
+        labelView.addSubview(label)
+        marker.addSubview(labelView)
+        
         self.combinedChartView.marker = marker
     }
 }
@@ -301,36 +312,37 @@ extension KLineView : ChartViewDelegate {
 
             let open = jsonArray[1].stringValue.nsDecimalValue
             let openString = "开盘:\(open.stringValue)" + "\n"
-            MyLog(openString)
+//            MyLog(openString)
             value += openString
 
             let close = jsonArray[4].stringValue.nsDecimalValue
             let closeString = "收盘:\(close.stringValue)" + "\n"
-            MyLog(closeString)
+//            MyLog(closeString)
             value += closeString
 
             let high = jsonArray[2].stringValue.nsDecimalValue
             let highString = "最高:\(high.stringValue)" + "\n"
-            MyLog(highString)
+//            MyLog(highString)
             value += highString
 
             let low = jsonArray[3].stringValue.nsDecimalValue
             let lowString = "最低:\(low.stringValue)" + "\n"
-            MyLog(lowString)
+//            MyLog(lowString)
             value += lowString
 
             let volume = jsonArray[5].stringValue.nsDecimalValue
             let volumeString = "交易量:\(volume.stringValue)" + "\n"
-            MyLog(volumeString)
+//            MyLog(volumeString)
             value += volumeString
 
             let timestamp = jsonArray[0].doubleValue
             MyLog(timestamp)
             let timeString = Date(timeIntervalSince1970: timestamp/1000).dateFormatter()
             let time = "时间:\(timeString)"
-            MyLog(time)
+//            MyLog(time)
             value += time
 
+            MyLog(value)
             showMarkView(value: value)
 
             barChartView.highlightValue(x: candleEntry.x, dataSetIndex: 0, callDelegate:false)
@@ -376,44 +388,4 @@ class DateValueFormatter: NSObject ,IAxisValueFormatter {
         }
         return ""
     }
-}
-
-extension String {
-    var doubleValue:Double{
-        get{
-            return NSDecimalNumber.init(string: self).doubleValue
-        }
-    }
-    var nsDecimalValue:NSDecimalNumber{
-        return NSDecimalNumber(string: self)
-    }
-
-}
-extension Date {
-    func dateFormatter(_ dataFormat:String = "yyyy-MM-dd") -> String{
-        let dataFormatter = DateFormatter()
-        dataFormatter.dateFormat = dataFormat
-        return dataFormatter.string(from: self)
-    }
-}
-//MARK: - Array
-extension Array {
-    subscript (safe index:Int) -> Element? {
-        return (0..<count).contains(index) ? self[index] : nil
-    }
-    
-    public func object(at index:Int) -> Element? {
-        return (0..<count).contains(index) ? self[index] : nil
-    }
-}
-
-// MARK: - 打印方法
-func MyLog<T>(_ message : T,file:String = #file,methodName: String = #function, lineNumber: Int = #line){
-    #if DEBUG
-    let fileName = (file as NSString).lastPathComponent
-    let dateForm = DateFormatter.init()
-    dateForm.dateFormat = "HH:mm:ss:SSS"
-    print("[\(fileName)][\(lineNumber)][\(dateForm.string(from: Date()))]\(methodName):\(message)")
-    #endif
-    
 }

@@ -12,7 +12,7 @@ import Charts
 class KLineBarChartDataRenderer: BarChartRenderer {
 
     override func drawHighlighted(context: CGContext, indices: [Highlight]) {
-        super.drawHighlighted(context: context, indices: indices)
+//        super.drawHighlighted(context: context, indices: indices)
         guard
             let dataProvider = dataProvider,
             let barData = dataProvider.barData
@@ -41,13 +41,13 @@ class KLineBarChartDataRenderer: BarChartRenderer {
 
 var highlightLineColorKey = 100
 extension IBarChartDataSet {
-
-    var highlightLineColor : UIColor {
+    /// 柱状图高亮指引线颜色
+    var highlightLineColor : NSUIColor {
         set{
             objc_setAssociatedObject(self, &highlightLineColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get{
-            return (objc_getAssociatedObject(self, &highlightLineColorKey) as? UIColor) ?? UIColor(red: 255.0/255.0, green: 187.0/255.0, blue: 115.0/255.0, alpha: 1.0)
+            return (objc_getAssociatedObject(self, &highlightLineColorKey) as? NSUIColor) ?? NSUIColor(red: 255.0/255.0, green: 187.0/255.0, blue: 115.0/255.0, alpha: 1.0)
         }
     }
 }
