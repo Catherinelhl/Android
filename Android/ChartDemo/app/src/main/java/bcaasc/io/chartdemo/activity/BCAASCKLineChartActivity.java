@@ -248,7 +248,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         @Override
         public void getKLineBean(KLineBean kLineBean) {
             if (kLineBean != null) {
-chart.getMarker().refreshContent();
             }
 
         }
