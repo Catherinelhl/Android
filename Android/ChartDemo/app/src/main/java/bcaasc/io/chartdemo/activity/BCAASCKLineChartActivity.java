@@ -92,18 +92,26 @@ public class BCAASCKLineChartActivity extends DemoBase
     }
 
     private void initChart() {
-        chart.getDescription().setEnabled(false);
+        chart.getDescription().setEnabled(false);//右下角对图表的描述信息
         chart.setDrawGridBackground(false);
         chart.setDrawBarShadow(false);
-        //设置Y轴方向不能滑动
-        chart.setScaleYEnabled(false);
+        chart.setDrawBorders(true);//是否绘制边线
+        chart.setBorderWidth(1f);//边线宽度，单位dp
+        chart.setBorderColor(getResources().getColor(R.color.border_color));//边线颜色
+        chart.setHardwareAccelerationEnabled(true);//是否不开启硬件加速
+        chart.setMinOffset(0f);//设置上下内边距
+        chart.setExtraOffsets(10f, 0f, 10f, 0f);//图标周围格额外的偏移量
+//        chartBar.setExtraLeftOffset(10f);
+//        chartBar.setExtraRightOffset(10f);
+        chart.setDragEnabled(true);//启用图表拖拽事件
+        chart.setScaleYEnabled(false); //设置Y轴方向不能滑动
         chart.setHighlightFullBarEnabled(false);
-        // draw bars behind lines
-        chart.setDrawOrder(new DrawOrder[]{
+        chart.setDrawOrder(new DrawOrder[]{// draw bars behind lines
                 DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.CANDLE, DrawOrder.LINE, DrawOrder.SCATTER
         });
-        //设置颜色注释方位以及信息
-        Legend l = chart.getLegend();
+
+        Legend l = chart.getLegend();//主要控制左下方的图例的
+        l.setEnabled(true);//是否绘制 Legend 图例
         l.setWordWrapEnabled(true);
         //设置位于Chart上面
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -119,6 +127,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         // 设置不需要 Labels
         rightAxis.setDrawLabels(true);
         rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        rightAxis.enableGridDashedLine(10f, 10f, 0f); //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
 
 
         //开始定制左轴
@@ -126,8 +135,9 @@ public class BCAASCKLineChartActivity extends DemoBase
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawLabels(false);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+//        leftAxis.setLabelCount(5, false); //第一个参数是Y轴坐标的个数，第二个参数是 是否不均匀分布，true是不均匀分布
 
-        //开始定制X轴
+        //X轴
         XAxis xAxis = chart.getXAxis();
         //设置X轴的信息显示在底部
         xAxis.setPosition(XAxisPosition.BOTTOM);
@@ -136,6 +146,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         xAxis.setDrawLabels(false);
         //设置不显示X轴的下标线
         xAxis.setDrawAxisLine(false);
+        xAxis.enableGridDashedLine(10f, 10f, 0f);//绘制成虚线，只有在关闭硬件加速的情况下才能使用
 
         //自定义一个底部显示内容格式化
         ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
@@ -179,8 +190,12 @@ public class BCAASCKLineChartActivity extends DemoBase
         chartBar.setDrawValueAboveBar(false);
         // 设置Y轴不可放大
         chartBar.setScaleYEnabled(false);
-
+        chartBar.setDrawBorders(true);//是否绘制边线
+        chartBar.setBorderWidth(1f);//边线宽度，单位dp
         chartBar.getDescription().setEnabled(false);
+        chartBar.setMinOffset(0f);//设置上下内边距
+        chartBar.setExtraOffsets(10f, 0f, 10f, 10f);//图标周围格额外的偏移量
+
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -210,6 +225,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         leftAxis.setSpaceTop(15f);
         leftAxis.setDrawGridLines(true);
         leftAxis.setDrawLabels(false);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f); //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
 
 
 //        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
@@ -220,6 +236,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 
         Legend l = chartBar.getLegend();
+        l.setEnabled(false);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
@@ -486,6 +503,52 @@ public class BCAASCKLineChartActivity extends DemoBase
 
 
     private void initListener() {
+//        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+//
+//            @Override
+//            public void onValueSelected(Entry e, Highlight h) {
+//                Highlight highlight = new Highlight(h.getXIndex(), h.getValue(), h.getDataIndex(), h.getDataSetIndex());
+//
+//                float touchY = h.getTouchY() - mChartPrice.getHeight();
+//                Highlight h1 = mChartVolume.getHighlightByTouchPoint(h.getXIndex(), touchY);
+//                highlight.setTouchY(touchY);
+//                if (null == h1) {
+//                    highlight.setTouchYValue(0);
+//                } else {
+//                    highlight.setTouchYValue(h1.getTouchYValue());
+//                }
+//                chartBar.highlightValues(new Highlight[]{highlight});
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//                chartBar.highlightValue(null);
+//            }
+//        });
+//
+//        chartBar.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+//
+//            @Override
+//            public void onValueSelected(Entry e, Highlight h) {
+//                Highlight highlight = new Highlight(h.getXIndex(), h.getValue(), h.getDataIndex(), h.getDataSetIndex());
+//
+//                float touchY = h.getTouchY() + mChartPrice.getHeight();
+//                Highlight h1 = mChartPrice.getHighlightByTouchPoint(h.getXIndex(), touchY);
+//                highlight.setTouchY(touchY);
+//                if (null == h1) {
+//                    highlight.setTouchYValue(0);
+//                } else {
+//                    highlight.setTouchYValue(h1.getTouchYValue());
+//                }
+//                chart.highlightValues(new Highlight[]{highlight});
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//                chart.highlightValue(null);
+//            }
+//        });
+
         chart.setOnChartGestureListener(new OnChartGestureListener() {
             @Override
             public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
