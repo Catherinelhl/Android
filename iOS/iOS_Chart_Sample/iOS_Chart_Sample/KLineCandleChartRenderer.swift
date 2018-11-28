@@ -83,7 +83,7 @@ class KLineCandleChartRenderer: CandleStickChartRenderer {
         context.restoreGState()
     }
     
-    // 计算绘制位置并绘制文本，注意坐标值(相对于图标)转像素值(相对于手机屏幕)
+    /// 计算绘制位置并绘制文本，注意坐标值(相对于图标)转像素值(相对于手机屏幕)
     private func calculateTextPosition(_ valueText: String, originPoint: inout CGPoint, lowestVisibleX: CGFloat, highestVisibleX: CGFloat, isMaxValue: Bool, dataSet:ICandleChartDataSet){
         let attributes: [NSAttributedString.Key : Any] = [.font: UIFont.init(name: "Helvetica", size: 12) ?? UIFont.systemFont(ofSize: 12), .foregroundColor: dataSet.minMaxValueTextColor]
         
@@ -114,6 +114,65 @@ class KLineCandleChartRenderer: CandleStickChartRenderer {
             resultText = NSString(string: "←" + valueText)
         }
         resultText?.draw(at: originPoint, withAttributes: attributes)
+    }
+    
+    // MARK: 重写绘制高亮方法
+    override func drawHighlighted(context: CGContext, indices: [Highlight]) {
+        
+        guard
+            let dataProvider = dataProvider,
+            let candleData = dataProvider.candleData
+            else { return }
+        
+        context.saveGState()
+        
+        for high in indices
+        {
+            guard
+                let set = candleData.getDataSetByIndex(high.dataSetIndex) as? ICandleChartDataSet,
+                set.isHighlightEnabled
+                else { continue }
+            
+            guard let e = set.entryForXValue(high.x, closestToY: high.y) as? CandleChartDataEntry else { continue }
+            
+            if !isInBoundsX(entry: e, dataSet: set)
+            {
+                continue
+            }
+            
+            let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
+            
+            context.setStrokeColor(set.highlightColor.cgColor)
+            context.setLineWidth(set.highlightLineWidth)
+            
+            if set.highlightLineDashLengths != nil
+            {
+                context.setLineDash(phase: set.highlightLineDashPhase, lengths: set.highlightLineDashLengths!)
+            }
+            else
+            {
+                context.setLineDash(phase: 0.0, lengths: [])
+            }
+            
+            let closeValue = e.close * Double(animator.phaseY)
+            let openValue = e.open * Double(animator.phaseY)
+            let y = (closeValue + openValue) / 2.0
+            
+            let pt = trans.pixelForValues(x: e.x, y: y)
+            
+            high.setDraw(pt: pt)
+            
+            // draw the lines
+            drawHighlightLines(context: context, point: pt, set: set)
+        }
+        
+        context.restoreGState()
+    }
+    
+    private func isInBoundsX(entry e: ChartDataEntry, dataSet: IBarLineScatterCandleBubbleChartDataSet) -> Bool
+    {
+        let entryIndex = dataSet.entryIndex(entry: e)
+        return Double(entryIndex) < Double(dataSet.entryCount) * animator.phaseX
     }
 
 }

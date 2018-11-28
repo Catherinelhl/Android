@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		008BB6F5CF8A64BFCC6FE022 /* Pods_iOS_Chart_Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC80B3D01CD1E80E09A81A0 /* Pods_iOS_Chart_Sample.framework */; };
-		F550C00721ABAAB50013A3FB /* KLineBarChartDataRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F550C00621ABAAB50013A3FB /* KLineBarChartDataRenderer.swift */; };
+		F51635B221AE777A00CE9184 /* KLineDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51635B121AE777A00CE9184 /* KLineDataView.swift */; };
+		F51635B421AE778400CE9184 /* KLineDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F51635B321AE778400CE9184 /* KLineDataView.xib */; };
+		F550C00721ABAAB50013A3FB /* KLineBarChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */; };
 		F55BDD5721ACD5A60079DAC3 /* KLineCandleChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */; };
 		F55BDD5921ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */; };
 		F55BDD9421AD46C70079DAC3 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD9321AD46C70079DAC3 /* MyExtension.swift */; };
@@ -42,8 +44,10 @@
 /* Begin PBXFileReference section */
 		64312DA8BF824BB9D48350BE /* Pods-iOS_Chart_Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Chart_Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Chart_Sample/Pods-iOS_Chart_Sample.release.xcconfig"; sourceTree = "<group>"; };
 		9AC80B3D01CD1E80E09A81A0 /* Pods_iOS_Chart_Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Chart_Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F51635B121AE777A00CE9184 /* KLineDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDataView.swift; sourceTree = "<group>"; };
+		F51635B321AE778400CE9184 /* KLineDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KLineDataView.xib; sourceTree = "<group>"; };
 		F550C00221AB9B390013A3FB /* iOS_Chart_Sample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOS_Chart_Sample-Bridging-Header.h"; sourceTree = "<group>"; };
-		F550C00621ABAAB50013A3FB /* KLineBarChartDataRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineBarChartDataRenderer.swift; sourceTree = "<group>"; };
+		F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineBarChartRenderer.swift; sourceTree = "<group>"; };
 		F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineCandleChartRenderer.swift; sourceTree = "<group>"; };
 		F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineCombinedChartRenderer.swift; sourceTree = "<group>"; };
 		F55BDD9321AD46C70079DAC3 /* MyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExtension.swift; sourceTree = "<group>"; };
@@ -134,8 +138,10 @@
 			children = (
 				F5B0EACE219D69F20073C814 /* AppDelegate.swift */,
 				F5B0EAD0219D69F20073C814 /* ViewController.swift */,
+				F51635B121AE777A00CE9184 /* KLineDataView.swift */,
+				F51635B321AE778400CE9184 /* KLineDataView.xib */,
 				F5B0EAFC219D6CC70073C814 /* KLineView.swift */,
-				F550C00621ABAAB50013A3FB /* KLineBarChartDataRenderer.swift */,
+				F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */,
 				F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */,
 				F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */,
 				F55BDD9321AD46C70079DAC3 /* MyExtension.swift */,
@@ -275,6 +281,7 @@
 			files = (
 				F5B0EAD9219D69F30073C814 /* LaunchScreen.storyboard in Resources */,
 				F5B0EAD6219D69F30073C814 /* Assets.xcassets in Resources */,
+				F51635B421AE778400CE9184 /* KLineDataView.xib in Resources */,
 				F5B0EAD4219D69F20073C814 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,7 +365,8 @@
 				F55BDD9421AD46C70079DAC3 /* MyExtension.swift in Sources */,
 				F5B0EAFD219D6CC70073C814 /* KLineView.swift in Sources */,
 				F5B0EACF219D69F20073C814 /* AppDelegate.swift in Sources */,
-				F550C00721ABAAB50013A3FB /* KLineBarChartDataRenderer.swift in Sources */,
+				F550C00721ABAAB50013A3FB /* KLineBarChartRenderer.swift in Sources */,
+				F51635B221AE777A00CE9184 /* KLineDataView.swift in Sources */,
 				F55BDD5721ACD5A60079DAC3 /* KLineCandleChartRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

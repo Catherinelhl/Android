@@ -9,8 +9,9 @@
 import UIKit
 import Charts
 
-class KLineBarChartDataRenderer: BarChartRenderer {
+class KLineBarChartRenderer: BarChartRenderer {
 
+    // MARK: 重写绘制高亮状态
     override func drawHighlighted(context: CGContext, indices: [Highlight]) {
 //        super.drawHighlighted(context: context, indices: indices)
         guard
@@ -27,7 +28,7 @@ class KLineBarChartDataRenderer: BarChartRenderer {
             let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
             
             let pt = trans.pixelForValues(x: e.x, y: e.y)
-            
+            // 绘制高亮状态下的 指引线
             context.setStrokeColor(set.highlightLineColor.cgColor)
             context.setLineWidth(set.highlightLineWidth)
             context.beginPath()

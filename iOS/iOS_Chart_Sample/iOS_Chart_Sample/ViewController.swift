@@ -13,6 +13,7 @@ import SwiftyJSON
 class ViewController: UIViewController {
     
     private let kLineView = KLineView()
+    private let kLineDataView = KLineDataView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,7 @@ class ViewController: UIViewController {
         getData()
     }
 
+    // MARK: - 获取币安数据
     private func getData() {
         var param:[String:Any] = ["symbol":"ETHBTC",
                                   "interval":"1d"]

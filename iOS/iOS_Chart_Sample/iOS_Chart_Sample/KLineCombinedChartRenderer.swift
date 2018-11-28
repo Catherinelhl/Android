@@ -11,6 +11,7 @@ import Charts
 
 class KLineCombinedChartRenderer: CombinedChartRenderer {
 
+    // MARK: 重写绘制数据,在绘制数据时把默认的蜡烛图渲染类替换为自定义的蜡烛图渲染类
     override func drawData(context: CGContext) {
         for (index,renderer) in subRenderers.enumerated() where renderer is CandleStickChartRenderer {
             if renderer is KLineCandleChartRenderer {
