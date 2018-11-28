@@ -134,8 +134,9 @@ public class BCAASCKLineChartActivity extends DemoBase
         //设置字体
         data.setValueTypeface(tfLight);
 
-        //设置内容偏移量，否则第一个内容吗会被截掉
-        xAxis.setAxisMaximum(data.getXMax() + 0.35f);
+        //设置内容偏移量，否则first one & last one内容吗会被截掉
+        xAxis.setAxisMaximum(data.getXMax() + 0.5f);
+        xAxis.setAxisMinimum(data.getXMin() - 0.5f);
 
         //设置内容显示期
         BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
@@ -206,7 +207,15 @@ public class BCAASCKLineChartActivity extends DemoBase
         chartBar.setAutoScaleMinMaxEnabled(true);
         chartBar.setVisibleXRangeMinimum(5);
 
-        generateBarData();
+        BarData barData = generateBarData();
+        //如果当前是重新生成的BarData，那么就需要重新添加以及重新设置初始数据
+        if (barData != null) {
+            xAxis.setAxisMaximum(barData.getXMax() + 0.5f);
+            xAxis.setAxisMinimum(barData.getXMin() - 0.5f);
+            chartBar.setData(barData);
+        }
+        chartBar.invalidate();
+
     }
 
     private LineData generateLineData() {
@@ -296,7 +305,7 @@ public class BCAASCKLineChartActivity extends DemoBase
      *
      * @return
      */
-    private void generateBarData() {
+    private BarData generateBarData() {
         BarDataSet set;
         ArrayList<BarEntry> entries = new ArrayList<>();
 
@@ -306,7 +315,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             chartBar.getData().notifyDataChanged();
             chartBar.notifyDataSetChanged();
         } else {
-
             for (int index = 0; index < count; index++) {
                 entries.add(new BarEntry(index, Float.valueOf(kLineBeans.get(index).getVolume())));
             }
@@ -320,15 +328,13 @@ public class BCAASCKLineChartActivity extends DemoBase
             data.addDataSet(set);
             data.setValueFormatter(new LargeValueFormatter());
             data.setValueTypeface(tfLight);
-
             data.setBarWidth(0.9f);
+            return data;
 
-            chartBar.setData(data);
 
         }
+        return null;
 
-
-        chartBar.invalidate();
     }
 
 
@@ -343,7 +349,7 @@ public class BCAASCKLineChartActivity extends DemoBase
 
         ArrayList<CandleEntry> entries = new ArrayList<>();
         for (int index = 0; index < count; index++) {
-            entries.add(new CandleEntry(index + 0.4f, Float.valueOf(kLineBeans.get(index).getHigh()), Float.valueOf(kLineBeans.get(index).getLow()),
+            entries.add(new CandleEntry(index, Float.valueOf(kLineBeans.get(index).getHigh()), Float.valueOf(kLineBeans.get(index).getLow()),
                     Float.valueOf(kLineBeans.get(index).getOpen()), Float.valueOf(kLineBeans.get(index).getClose())));
         }
         CandleDataSet set = new CandleDataSet(entries, "ETHBTC");
