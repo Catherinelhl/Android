@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 import bcaasc.io.chartdemo.R;
+import bcaasc.io.chartdemo.listener.ChartMarkerViewListener;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
@@ -28,6 +29,8 @@ public class BcaasMarkerView extends MarkerView {
     private final DecimalFormat format;
     private boolean isKLine;
 
+    private ChartMarkerViewListener chartMarkerViewListener;
+
     public BcaasMarkerView(Context context, ValueFormatter bcaasValueFormatter, boolean isKLine) {
         super(context, R.layout.custom_marker_view);
 
@@ -37,12 +40,17 @@ public class BcaasMarkerView extends MarkerView {
         format = new DecimalFormat("###.0");
     }
 
+    public void setChartMarkerViewListener(ChartMarkerViewListener chartMarkerViewListener) {
+        this.chartMarkerViewListener = chartMarkerViewListener;
+    }
+
     // runs every time the MarkerView is redrawn, can be used to update the
     // content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-
-        tvContent.setText( isKLine ? xAxisValueFormatter.getKLineData(e.getX()) : xAxisValueFormatter.getFormattedValue(e.getX())+"\n"+format.format(e.getY()));
+        this.chartMarkerViewListener.getIndex((int) e.getX());
+//        this.chartMarkerViewListener.getKLineBean(xAxisValueFormatter.getKLineBean((int) (e.getX())));
+        tvContent.setText(isKLine ? xAxisValueFormatter.getKLineData(e.getX()) : xAxisValueFormatter.getFormattedValue(e.getX()) + "\n" + format.format(e.getY()));
 
         super.refreshContent(e, highlight);
     }

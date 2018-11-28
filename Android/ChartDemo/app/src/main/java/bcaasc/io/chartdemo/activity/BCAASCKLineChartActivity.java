@@ -11,11 +11,9 @@ import android.widget.TextView;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.KLineBean;
 import bcaasc.io.chartdemo.contract.BcaasCChartContract;
+import bcaasc.io.chartdemo.listener.ChartMarkerViewListener;
 import bcaasc.io.chartdemo.presenter.BcaasCChartPresenterImp;
-import bcaasc.io.chartdemo.tool.BcaasMarkerView;
-import bcaasc.io.chartdemo.tool.BcaasValueFormatter;
-import bcaasc.io.chartdemo.tool.DemoBase;
-import bcaasc.io.chartdemo.tool.LogTool;
+import bcaasc.io.chartdemo.tool.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.github.mikephil.charting.charts.BarChart;
@@ -45,6 +43,8 @@ import java.util.List;
 public class BCAASCKLineChartActivity extends DemoBase
         implements OnChartValueSelectedListener, BcaasCChartContract.View {
 
+    private String TAG = BCAASCKLineChartActivity.class.getSimpleName();
+
     @BindView(R.id.tv_open)
     TextView tvOpen;
     @BindView(R.id.tv_high)
@@ -63,7 +63,6 @@ public class BCAASCKLineChartActivity extends DemoBase
     CombinedChart chart;
     @BindView(R.id.chart_bar)
     BarChart chartBar;
-    private String TAG = BCAASCKLineChartActivity.class.getSimpleName();
 
     private int count;
     private List<KLineBean> kLineBeans = new ArrayList<>();
@@ -128,8 +127,6 @@ public class BCAASCKLineChartActivity extends DemoBase
         leftAxis.setDrawLabels(false);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
 
-//        leftAxis.setMaxWidth(50f);
-
         //开始定制X轴
         XAxis xAxis = chart.getXAxis();
         //设置X轴的信息显示在底部
@@ -162,8 +159,9 @@ public class BCAASCKLineChartActivity extends DemoBase
         xAxis.setAxisMaximum(data.getXMax() + 0.5f);
         xAxis.setAxisMinimum(data.getXMin() - 0.5f);
 
-        //设置内容显示期
+        //设置内容显示自定义数据
         BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
+        mv.setChartMarkerViewListener(chartMarkerViewListener);
         mv.setChartView(chart); // For bounds control
         chart.setMarker(mv); // Set the marker to the chart
         chart.setData(data);
@@ -229,6 +227,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         l.setForm(Legend.LegendForm.SQUARE);
 
         BcaasMarkerView mv = new BcaasMarkerView(this, custom, false);
+        mv.setChartMarkerViewListener(chartMarkerViewListener);
         mv.setChartView(chartBar); // For bounds control
         chartBar.setMarker(mv); // Set the marker to the chart
         chartBar.setAutoScaleMinMaxEnabled(true);
@@ -244,6 +243,33 @@ public class BCAASCKLineChartActivity extends DemoBase
         chartBar.invalidate();
 
     }
+
+    private ChartMarkerViewListener chartMarkerViewListener = new ChartMarkerViewListener() {
+        @Override
+        public void getKLineBean(KLineBean kLineBean) {
+            if (kLineBean != null) {
+chart.getMarker().refreshContent();
+            }
+
+        }
+
+        @Override
+        public void getIndex(int index) {
+            if (kLineBeans != null && kLineBeans.size() > 0) {
+                if (index < kLineBeans.size()) {
+                    KLineBean kLineBean = kLineBeans.get(index);
+                    //显示当前数据
+                    tvOpen.setText("Open: " + kLineBean.getOpen());
+                    tvClose.setText("Close: " + kLineBean.getClose());
+                    tvHigh.setText("High: " + kLineBean.getHigh());
+                    tvLow.setText("Low: " + kLineBean.getLow());
+                    tvVolume.setText("Volume: " + kLineBean.getVolume());
+                    tvNumber.setText("Number: " + kLineBean.getNumberOfTrades());
+                    tvTimer.setText("Time: " + DateFormatTool.getUTCDateForAMPMFormat(kLineBean.getOpenTime()));
+                }
+            }
+        }
+    };
 
     private LineData generateLineData() {
         calculateLineData();
