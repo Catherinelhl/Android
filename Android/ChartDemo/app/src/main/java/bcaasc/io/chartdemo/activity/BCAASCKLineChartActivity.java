@@ -107,7 +107,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         chart.setScaleYEnabled(false); //设置Y轴方向不能滑动
         chart.setHighlightFullBarEnabled(false);
         chart.setDrawOrder(new DrawOrder[]{// draw bars behind lines
-                DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.CANDLE, DrawOrder.LINE, DrawOrder.SCATTER
+                DrawOrder.CANDLE, DrawOrder.LINE
         });
 
         Legend l = chart.getLegend();//主要控制左下方的图例的
@@ -220,9 +220,9 @@ public class BCAASCKLineChartActivity extends DemoBase
 
         YAxis leftAxis = chartBar.getAxisLeft();
         leftAxis.setTypeface(tfLight);
-        leftAxis.setLabelCount(8, false);
+//        leftAxis.setLabelCount(8, false);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        leftAxis.setSpaceTop(15f);
+//        leftAxis.setSpaceTop(15f);
         leftAxis.setDrawGridLines(true);
         leftAxis.setDrawLabels(false);
         leftAxis.enableGridDashedLine(10f, 10f, 0f); //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
@@ -263,9 +263,7 @@ public class BCAASCKLineChartActivity extends DemoBase
 
     private ChartMarkerViewListener chartMarkerViewListener = new ChartMarkerViewListener() {
         @Override
-        public void getKLineBean(KLineBean kLineBean) {
-            if (kLineBean != null) {
-            }
+        public void getKLineBean(Entry entry, Highlight highlight, KLineBean kLineBean) {
 
         }
 
@@ -335,6 +333,7 @@ public class BCAASCKLineChartActivity extends DemoBase
         // create a data object with the data sets
         d.setValueTextColor(Color.BLACK);
         d.setValueTextSize(8f);
+        d.setHighlightEnabled(false);
         return d;
     }
 
@@ -490,7 +489,6 @@ public class BCAASCKLineChartActivity extends DemoBase
             kLineBeans.add(kLineBean);
         }
         count = kLineBeans.size();
-        LogTool.d(TAG, count);
         initChart();
         initBarChart2();
 
@@ -503,10 +501,14 @@ public class BCAASCKLineChartActivity extends DemoBase
 
 
     private void initListener() {
-//        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-//
-//            @Override
-//            public void onValueSelected(Entry e, Highlight h) {
+        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                chartBar.highlightValue(h);
+                chartBar.invalidate();
+//                chartBar.getMarker().refreshContent(e,h);
+
 //                Highlight highlight = new Highlight(h.getXIndex(), h.getValue(), h.getDataIndex(), h.getDataSetIndex());
 //
 //                float touchY = h.getTouchY() - mChartPrice.getHeight();
@@ -518,36 +520,40 @@ public class BCAASCKLineChartActivity extends DemoBase
 //                    highlight.setTouchYValue(h1.getTouchYValue());
 //                }
 //                chartBar.highlightValues(new Highlight[]{highlight});
-//            }
-//
-//            @Override
-//            public void onNothingSelected() {
-//                chartBar.highlightValue(null);
-//            }
-//        });
-//
-//        chartBar.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-//
-//            @Override
-//            public void onValueSelected(Entry e, Highlight h) {
-//                Highlight highlight = new Highlight(h.getXIndex(), h.getValue(), h.getDataIndex(), h.getDataSetIndex());
-//
-//                float touchY = h.getTouchY() + mChartPrice.getHeight();
-//                Highlight h1 = mChartPrice.getHighlightByTouchPoint(h.getXIndex(), touchY);
+            }
+
+            @Override
+            public void onNothingSelected() {
+                chartBar.highlightValue(null);
+            }
+        });
+
+        chartBar.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+//                Highlight highlight = new Highlight(h.getX(),h.getY(), h.getDataIndex(), h.getDataSetIndex());
+//                float touchY = h.getTouchY() + chart.getHeight();
+//                Highlight h1 = chart.getHighlightByTouchPoint(h.getX(), touchY);
 //                highlight.setTouchY(touchY);
 //                if (null == h1) {
 //                    highlight.setTouchYValue(0);
 //                } else {
 //                    highlight.setTouchYValue(h1.getTouchYValue());
 //                }
-//                chart.highlightValues(new Highlight[]{highlight});
-//            }
-//
-//            @Override
-//            public void onNothingSelected() {
-//                chart.highlightValue(null);
-//            }
-//        });
+                h.setDataIndex(1);
+                h.setmDataSetIndex(0);
+                chart.highlightValues(new Highlight[]{h});
+                chart.getMarker().refreshContent(e,h);
+                chart.notifyDataSetChanged();
+                chart.invalidate();
+            }
+
+            @Override
+            public void onNothingSelected() {
+                chart.highlightValue(null);
+            }
+        });
 
         chart.setOnChartGestureListener(new OnChartGestureListener() {
             @Override

@@ -306,7 +306,6 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
             tPosition[0] = maxEntry == null ? 0f : maxEntry.getX();
             tPosition[1] = maxEntry == null ? 0f : maxEntry.getHigh();
             trans.pointValuesToPixel(tPosition);
-            System.out.println("---high-dataSet:" + tPosition[0] + "---self:" + maxIndex * phaseX);
             mValuePaint.setColor(dataSet.getValueTextColor(maxIndex / 2));
             //c.drawText(highString, x+highStringWidth , y-yOffset, mValuePaint);
             c.drawText(highString, tPosition[0] - highStringWidth / 2, tPosition[1], mValuePaint);
@@ -325,7 +324,6 @@ public class CandleStickChartRenderer extends LineScatterCandleRadarRenderer {
             tPosition[0] = maxEntry == null ? 0f : maxEntry.getX();
             tPosition[1] = maxEntry == null ? 0f : maxEntry.getHigh();
             trans.pointValuesToPixel(tPosition);
-            System.out.println("---high-dataSet:" + tPosition[0] + "---self:" + maxIndex * phaseX);
 
             mValuePaint.setColor(dataSet.getValueTextColor(maxIndex / 2));
             //c.drawText(highString, x+highStringWidth , y-yOffset, mValuePaint);

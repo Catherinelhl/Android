@@ -49,7 +49,6 @@ public class BcaasMarkerView extends MarkerView {
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
         this.chartMarkerViewListener.getIndex((int) e.getX());
-//        this.chartMarkerViewListener.getKLineBean(xAxisValueFormatter.getKLineBean((int) (e.getX())));
         tvContent.setText(isKLine ? xAxisValueFormatter.getKLineData(e.getX()) : xAxisValueFormatter.getFormattedValue(e.getX()) + "\n" + format.format(e.getY()));
 
         super.refreshContent(e, highlight);

@@ -88,6 +88,19 @@ public class Highlight {
     }
 
     /**
+     * constructor
+     *
+     * @param x            the x-value of the highlighted value
+     * @param y            the y-value of the highlighted value
+     * @param dataSetIndex the index of the DataSet the highlighted value belongs to
+     */
+    public Highlight(float x, float y,int mDataIndex, int dataSetIndex) {
+        this.mX = x;
+        this.mY = y;
+        this.mDataIndex = mDataIndex;
+        this.mDataSetIndex = dataSetIndex;
+    }
+    /**
      * Constructor, only used for stacked-barchart.
      *
      * @param x            the index of the highlighted value on the x-axis
@@ -144,6 +157,10 @@ public class Highlight {
 
     public void setDataIndex(int mDataIndex) {
         this.mDataIndex = mDataIndex;
+    }
+
+    public void setmDataSetIndex(int mDataSetIndex) {
+        this.mDataSetIndex = mDataSetIndex;
     }
 
     /**
@@ -231,5 +248,25 @@ public class Highlight {
     public String toString() {
         return "Highlight, x: " + mX + ", y: " + mY + ", dataSetIndex: " + mDataSetIndex
                 + ", stackIndex (only stacked barentry): " + mStackIndex;
+    }
+
+    private float mTouchYValue;
+
+    public float getTouchYValue() {
+        return mTouchYValue;
+    }
+
+    public void setTouchYValue(float touchYValue) {
+        this.mTouchYValue = touchYValue;
+    }
+
+    private float mTouchY;
+
+    public float getTouchY() {
+        return mTouchY;
+    }
+
+    public void setTouchY(float touchY) {
+        this.mTouchY = touchY;
     }
 }
