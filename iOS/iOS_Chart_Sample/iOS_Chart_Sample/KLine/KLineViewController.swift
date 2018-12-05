@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  KLineViewController.swift
 //  iOS_Chart_Sample
 //
 //  Created by Dong on 2018/11/15.
@@ -10,14 +10,15 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class ViewController: UIViewController {
+class KLineViewController: UIViewController {
     
     private let kLineView = KLineView()
-    private let kLineDataView = KLineDataView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.view.backgroundColor = .white
         
         self.view.addSubview(kLineView)
         
