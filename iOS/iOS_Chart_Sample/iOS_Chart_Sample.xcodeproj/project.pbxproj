@@ -8,20 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		008BB6F5CF8A64BFCC6FE022 /* Pods_iOS_Chart_Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC80B3D01CD1E80E09A81A0 /* Pods_iOS_Chart_Sample.framework */; };
-		F51635B221AE777A00CE9184 /* KLineDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51635B121AE777A00CE9184 /* KLineDataView.swift */; };
-		F51635B421AE778400CE9184 /* KLineDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F51635B321AE778400CE9184 /* KLineDataView.xib */; };
 		F550C00721ABAAB50013A3FB /* KLineBarChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */; };
 		F55BDD5721ACD5A60079DAC3 /* KLineCandleChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */; };
 		F55BDD5921ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */; };
 		F55BDD9421AD46C70079DAC3 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD9321AD46C70079DAC3 /* MyExtension.swift */; };
 		F5B0EACF219D69F20073C814 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B0EACE219D69F20073C814 /* AppDelegate.swift */; };
-		F5B0EAD1219D69F20073C814 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B0EAD0219D69F20073C814 /* ViewController.swift */; };
+		F5B0EAD1219D69F20073C814 /* KLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B0EAD0219D69F20073C814 /* KLineViewController.swift */; };
 		F5B0EAD4219D69F20073C814 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B0EAD2219D69F20073C814 /* Main.storyboard */; };
 		F5B0EAD6219D69F30073C814 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5B0EAD5219D69F30073C814 /* Assets.xcassets */; };
 		F5B0EAD9219D69F30073C814 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5B0EAD7219D69F30073C814 /* LaunchScreen.storyboard */; };
 		F5B0EAE4219D69F30073C814 /* iOS_Chart_SampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B0EAE3219D69F30073C814 /* iOS_Chart_SampleTests.swift */; };
 		F5B0EAEF219D69F30073C814 /* iOS_Chart_SampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B0EAEE219D69F30073C814 /* iOS_Chart_SampleUITests.swift */; };
 		F5B0EAFD219D6CC70073C814 /* KLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B0EAFC219D6CC70073C814 /* KLineView.swift */; };
+		F5E111DD21B7D6F200590B2D /* RootTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E111DC21B7D6F200590B2D /* RootTableViewController.swift */; };
+		F5E111DF21B7D70100590B2D /* LineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E111DE21B7D70100590B2D /* LineViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,8 +44,6 @@
 /* Begin PBXFileReference section */
 		64312DA8BF824BB9D48350BE /* Pods-iOS_Chart_Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Chart_Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Chart_Sample/Pods-iOS_Chart_Sample.release.xcconfig"; sourceTree = "<group>"; };
 		9AC80B3D01CD1E80E09A81A0 /* Pods_iOS_Chart_Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Chart_Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F51635B121AE777A00CE9184 /* KLineDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineDataView.swift; sourceTree = "<group>"; };
-		F51635B321AE778400CE9184 /* KLineDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = KLineDataView.xib; sourceTree = "<group>"; };
 		F550C00221AB9B390013A3FB /* iOS_Chart_Sample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOS_Chart_Sample-Bridging-Header.h"; sourceTree = "<group>"; };
 		F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineBarChartRenderer.swift; sourceTree = "<group>"; };
 		F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineCandleChartRenderer.swift; sourceTree = "<group>"; };
@@ -53,7 +51,7 @@
 		F55BDD9321AD46C70079DAC3 /* MyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyExtension.swift; sourceTree = "<group>"; };
 		F5B0EACB219D69F20073C814 /* iOS_Chart_Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_Chart_Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B0EACE219D69F20073C814 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F5B0EAD0219D69F20073C814 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F5B0EAD0219D69F20073C814 /* KLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineViewController.swift; sourceTree = "<group>"; };
 		F5B0EAD3219D69F20073C814 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F5B0EAD5219D69F30073C814 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5B0EAD8219D69F30073C814 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -65,6 +63,8 @@
 		F5B0EAEE219D69F30073C814 /* iOS_Chart_SampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_Chart_SampleUITests.swift; sourceTree = "<group>"; };
 		F5B0EAF0219D69F30073C814 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5B0EAFC219D6CC70073C814 /* KLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineView.swift; sourceTree = "<group>"; };
+		F5E111DC21B7D6F200590B2D /* RootTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTableViewController.swift; sourceTree = "<group>"; };
+		F5E111DE21B7D70100590B2D /* LineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineViewController.swift; sourceTree = "<group>"; };
 		F986E089F49B8046357BE1CE /* Pods-iOS_Chart_Sample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Chart_Sample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Chart_Sample/Pods-iOS_Chart_Sample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,13 +137,9 @@
 			isa = PBXGroup;
 			children = (
 				F5B0EACE219D69F20073C814 /* AppDelegate.swift */,
-				F5B0EAD0219D69F20073C814 /* ViewController.swift */,
-				F51635B121AE777A00CE9184 /* KLineDataView.swift */,
-				F51635B321AE778400CE9184 /* KLineDataView.xib */,
-				F5B0EAFC219D6CC70073C814 /* KLineView.swift */,
-				F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */,
-				F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */,
-				F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */,
+				F5E111DC21B7D6F200590B2D /* RootTableViewController.swift */,
+				F5E111DB21B7D6C100590B2D /* Line */,
+				F5E111DA21B7D6B700590B2D /* KLine */,
 				F55BDD9321AD46C70079DAC3 /* MyExtension.swift */,
 				F5B0EAD2219D69F20073C814 /* Main.storyboard */,
 				F5B0EAD5219D69F30073C814 /* Assets.xcassets */,
@@ -170,6 +166,26 @@
 				F5B0EAF0219D69F30073C814 /* Info.plist */,
 			);
 			path = iOS_Chart_SampleUITests;
+			sourceTree = "<group>";
+		};
+		F5E111DA21B7D6B700590B2D /* KLine */ = {
+			isa = PBXGroup;
+			children = (
+				F5B0EAD0219D69F20073C814 /* KLineViewController.swift */,
+				F5B0EAFC219D6CC70073C814 /* KLineView.swift */,
+				F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */,
+				F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */,
+				F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */,
+			);
+			path = KLine;
+			sourceTree = "<group>";
+		};
+		F5E111DB21B7D6C100590B2D /* Line */ = {
+			isa = PBXGroup;
+			children = (
+				F5E111DE21B7D70100590B2D /* LineViewController.swift */,
+			);
+			path = Line;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,7 +297,6 @@
 			files = (
 				F5B0EAD9219D69F30073C814 /* LaunchScreen.storyboard in Resources */,
 				F5B0EAD6219D69F30073C814 /* Assets.xcassets in Resources */,
-				F51635B421AE778400CE9184 /* KLineDataView.xib in Resources */,
 				F5B0EAD4219D69F20073C814 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,13 +376,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F55BDD5921ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift in Sources */,
-				F5B0EAD1219D69F20073C814 /* ViewController.swift in Sources */,
+				F5B0EAD1219D69F20073C814 /* KLineViewController.swift in Sources */,
 				F55BDD9421AD46C70079DAC3 /* MyExtension.swift in Sources */,
+				F5E111DD21B7D6F200590B2D /* RootTableViewController.swift in Sources */,
 				F5B0EAFD219D6CC70073C814 /* KLineView.swift in Sources */,
 				F5B0EACF219D69F20073C814 /* AppDelegate.swift in Sources */,
 				F550C00721ABAAB50013A3FB /* KLineBarChartRenderer.swift in Sources */,
-				F51635B221AE777A00CE9184 /* KLineDataView.swift in Sources */,
 				F55BDD5721ACD5A60079DAC3 /* KLineCandleChartRenderer.swift in Sources */,
+				F5E111DF21B7D70100590B2D /* LineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
