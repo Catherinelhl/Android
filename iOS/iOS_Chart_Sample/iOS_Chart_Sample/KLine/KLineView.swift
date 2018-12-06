@@ -486,17 +486,21 @@ extension KLineView : ChartViewDelegate {
 // MARK: - 格式化X轴数据为日期
 class DateValueFormatter: NSObject ,IAxisValueFormatter {
     private let dateFormatter = DateFormatter.init()
-    private var data = [[Any]]()
-    init(dateFormat:String = "yy-MM-dd", data:[[Any]]) {
+    private var data : [[Any]]?
+    init(dateFormat:String = "yy-MM-dd", data:[[Any]]? = nil) {
         super.init()
         dateFormatter.dateFormat = dateFormat
         self.data = data
     }
     
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-        if let dataArray = data[safe:Int(value)] {
-            let timestamp = JSON(dataArray)[0].doubleValue
-            return dateFormatter.string(from: Date.init(timeIntervalSince1970: timestamp/1000))
+        if let data = self.data {
+            if let dataArray = data[safe:Int(value)] {
+                let timestamp = JSON(dataArray)[0].doubleValue
+                return dateFormatter.string(from: Date.init(timeIntervalSince1970: timestamp/1000))
+            }
+        }else {
+            return dateFormatter.string(from: Date.init(timeIntervalSince1970: value/1000))
         }
         return ""
     }

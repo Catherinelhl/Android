@@ -46,6 +46,12 @@ extension Array {
     }
 }
 
+extension UIColor {
+    class func hexColor(_ hex:UInt) -> UIColor {
+        return UIColor.init(red: CGFloat((hex & 0xFF0000) >> 16) / 255.0, green: CGFloat((hex & 0x00FF00) >> 8) / 255.0, blue: CGFloat(hex & 0x0000FF) / 255.0, alpha: 1)
+    }
+}
+
 // MARK: - 打印方法
 func MyLog<T>(_ message : T,file:String = #file,methodName: String = #function, lineNumber: Int = #line){
     #if DEBUG

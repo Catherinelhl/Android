@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		008BB6F5CF8A64BFCC6FE022 /* Pods_iOS_Chart_Sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC80B3D01CD1E80E09A81A0 /* Pods_iOS_Chart_Sample.framework */; };
+		F5173CF421B8BB5B00416F90 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5173CF321B8BB5B00416F90 /* LineView.swift */; };
+		F5173CF921B8D5C200416F90 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5173CF821B8D5C200416F90 /* BalloonMarker.swift */; };
+		F5393B4A21B924F400FB5AFE /* CoinList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5393B4921B924F400FB5AFE /* CoinList.swift */; };
+		F5393B4C21B9252F00FB5AFE /* ResponseStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5393B4B21B9252F00FB5AFE /* ResponseStatus.swift */; };
+		F5393B4E21B927FC00FB5AFE /* CoinInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5393B4D21B927FC00FB5AFE /* CoinInfo.swift */; };
+		F5393B5021B929D400FB5AFE /* QuoteInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5393B4F21B929D400FB5AFE /* QuoteInfo.swift */; };
 		F550C00721ABAAB50013A3FB /* KLineBarChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */; };
 		F55BDD5721ACD5A60079DAC3 /* KLineCandleChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */; };
 		F55BDD5921ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BDD5821ACD5E70079DAC3 /* KLineCombinedChartRenderer.swift */; };
@@ -44,6 +50,12 @@
 /* Begin PBXFileReference section */
 		64312DA8BF824BB9D48350BE /* Pods-iOS_Chart_Sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS_Chart_Sample.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS_Chart_Sample/Pods-iOS_Chart_Sample.release.xcconfig"; sourceTree = "<group>"; };
 		9AC80B3D01CD1E80E09A81A0 /* Pods_iOS_Chart_Sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Chart_Sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5173CF321B8BB5B00416F90 /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
+		F5173CF821B8D5C200416F90 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BalloonMarker.swift; path = "../../../Charts_Sample/ChartsDemo-iOS/Swift/Components/BalloonMarker.swift"; sourceTree = "<group>"; };
+		F5393B4921B924F400FB5AFE /* CoinList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinList.swift; sourceTree = "<group>"; };
+		F5393B4B21B9252F00FB5AFE /* ResponseStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseStatus.swift; sourceTree = "<group>"; };
+		F5393B4D21B927FC00FB5AFE /* CoinInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinInfo.swift; sourceTree = "<group>"; };
+		F5393B4F21B929D400FB5AFE /* QuoteInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteInfo.swift; sourceTree = "<group>"; };
 		F550C00221AB9B390013A3FB /* iOS_Chart_Sample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOS_Chart_Sample-Bridging-Header.h"; sourceTree = "<group>"; };
 		F550C00621ABAAB50013A3FB /* KLineBarChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineBarChartRenderer.swift; sourceTree = "<group>"; };
 		F55BDD5621ACD5A60079DAC3 /* KLineCandleChartRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KLineCandleChartRenderer.swift; sourceTree = "<group>"; };
@@ -111,6 +123,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F5393B4821B9249500FB5AFE /* VO */ = {
+			isa = PBXGroup;
+			children = (
+				F5393B4921B924F400FB5AFE /* CoinList.swift */,
+				F5393B4B21B9252F00FB5AFE /* ResponseStatus.swift */,
+				F5393B4D21B927FC00FB5AFE /* CoinInfo.swift */,
+				F5393B4F21B929D400FB5AFE /* QuoteInfo.swift */,
+			);
+			path = VO;
+			sourceTree = "<group>";
+		};
 		F5B0EAC2219D69F20073C814 = {
 			isa = PBXGroup;
 			children = (
@@ -138,6 +161,7 @@
 			children = (
 				F5B0EACE219D69F20073C814 /* AppDelegate.swift */,
 				F5E111DC21B7D6F200590B2D /* RootTableViewController.swift */,
+				F5393B4821B9249500FB5AFE /* VO */,
 				F5E111DB21B7D6C100590B2D /* Line */,
 				F5E111DA21B7D6B700590B2D /* KLine */,
 				F55BDD9321AD46C70079DAC3 /* MyExtension.swift */,
@@ -184,6 +208,8 @@
 			isa = PBXGroup;
 			children = (
 				F5E111DE21B7D70100590B2D /* LineViewController.swift */,
+				F5173CF321B8BB5B00416F90 /* LineView.swift */,
+				F5173CF821B8D5C200416F90 /* BalloonMarker.swift */,
 			);
 			path = Line;
 			sourceTree = "<group>";
@@ -351,6 +377,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-iOS_Chart_Sample/Pods-iOS_Chart_Sample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
@@ -360,6 +387,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
@@ -379,10 +407,16 @@
 				F5B0EAD1219D69F20073C814 /* KLineViewController.swift in Sources */,
 				F55BDD9421AD46C70079DAC3 /* MyExtension.swift in Sources */,
 				F5E111DD21B7D6F200590B2D /* RootTableViewController.swift in Sources */,
+				F5173CF921B8D5C200416F90 /* BalloonMarker.swift in Sources */,
 				F5B0EAFD219D6CC70073C814 /* KLineView.swift in Sources */,
+				F5393B4A21B924F400FB5AFE /* CoinList.swift in Sources */,
+				F5393B5021B929D400FB5AFE /* QuoteInfo.swift in Sources */,
 				F5B0EACF219D69F20073C814 /* AppDelegate.swift in Sources */,
+				F5393B4C21B9252F00FB5AFE /* ResponseStatus.swift in Sources */,
+				F5393B4E21B927FC00FB5AFE /* CoinInfo.swift in Sources */,
 				F550C00721ABAAB50013A3FB /* KLineBarChartRenderer.swift in Sources */,
 				F55BDD5721ACD5A60079DAC3 /* KLineCandleChartRenderer.swift in Sources */,
+				F5173CF421B8BB5B00416F90 /* LineView.swift in Sources */,
 				F5E111DF21B7D70100590B2D /* LineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
