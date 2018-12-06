@@ -20,9 +20,17 @@ class KLineViewController: UIViewController {
         
         self.view.backgroundColor = .white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(screenRotateAction(_:)), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+        
         self.view.addSubview(kLineView)
         
-        kLineView.snp.makeConstraints { (make) in
+        setPortraitLayout()
+        
+        getData()
+    }
+    
+    private func setPortraitLayout() {
+        kLineView.snp.remakeConstraints { (make) in
             make.centerY.equalToSuperview()
             if #available(iOS 11.0, *) {
                 make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
@@ -31,8 +39,16 @@ class KLineViewController: UIViewController {
             }
             make.height.equalTo(320)
         }
-        
-        getData()
+    }
+    
+    private func setLandscapeLayout() {
+        kLineView.snp.remakeConstraints { (make) in
+            if #available(iOS 11.0, *) {
+                make.edges.equalTo(self.view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
+            } else {
+                make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
+            }
+        }
     }
 
     // MARK: - 获取币安数据
@@ -53,6 +69,18 @@ class KLineViewController: UIViewController {
         }
     }
     
+    @objc private func screenRotateAction(_ notification:Notification) {
+        if UIApplication.shared.statusBarOrientation.isPortrait {
+            self.setPortraitLayout()
+        }else {
+            self.setLandscapeLayout()
+        }
+        
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
 }
 

@@ -3,12 +3,14 @@ PODS:
   - Charts (3.1.1):
     - Charts/Core (= 3.1.1)
   - Charts/Core (3.1.1)
+  - HandyJSON (4.2.1)
   - SnapKit (4.2.0)
   - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
   - Alamofire
   - Charts (~> 3.1.1)
+  - HandyJSON
   - SnapKit
   - SwiftyJSON
 
@@ -16,15 +18,17 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Charts
+    - HandyJSON
     - SnapKit
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
   Charts: 90a4d61da0f6e06684c591e3bcab11940fe61736
+  HandyJSON: d0c5fc80204f29056d59d3e5c4587fa0b16b60a8
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 425aa37843dd4ab5d15c38138e7e011791c161e4
+PODFILE CHECKSUM: c059606bcca0911727212e28485f3af9d73607dd
 
 COCOAPODS: 1.5.3
