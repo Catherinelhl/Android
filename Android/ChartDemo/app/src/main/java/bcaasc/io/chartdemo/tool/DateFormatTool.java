@@ -5,7 +5,6 @@ import bcaasc.io.chartdemo.constants.Constants;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import static android.text.format.Time.TIMEZONE_UTC;
@@ -17,6 +16,7 @@ import static android.text.format.Time.TIMEZONE_UTC;
  * 时间转换
  */
 public class DateFormatTool {
+    private String TAG = DateFormatTool.class.getSimpleName();
 
     private final static String DATETIMEFORMATWithH = "yy/MM/dd HH";
     private final static String DATETIMEFORMAT = "yy/MM/dd";
@@ -95,7 +95,6 @@ public class DateFormatTool {
                 break;
             case oneYear:
                 cal.add(Calendar.YEAR, -1);
-
                 break;
         }
         System.out.println(DateFormatTool.getUTCDateForAMPMFormat2(String.valueOf(cal.getTimeInMillis())));
@@ -118,10 +117,35 @@ public class DateFormatTool {
                 break;
             case oneYear:
                 cal.add(Calendar.YEAR, -1);
-
                 break;
         }
         System.out.println(DateFormatTool.getUTCDateForAMPMFormat2(String.valueOf(cal.getTimeInMillis())));
         return cal.getTime();
     }
+
+
+    /**
+     * 当前年的开始时间
+     *
+     * @return
+     */
+    public static Date getCurrentYearStartTime() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
+        Date now = null;
+        try {
+            c.set(Calendar.MONTH, 0);
+            c.set(Calendar.DATE, 1);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            return c.getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogTool.e(DateFormatTool.class.getSimpleName(), e.getCause().toString());
+        }
+        return now;
+    }
+
 }

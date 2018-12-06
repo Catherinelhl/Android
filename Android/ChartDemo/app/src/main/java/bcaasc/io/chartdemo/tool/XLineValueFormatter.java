@@ -6,13 +6,16 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class LineValueFormatter extends ValueFormatter {
-    private String TAG = LineValueFormatter.class.getSimpleName();
+/**
+ * X轴label数据定制
+ */
+public class XLineValueFormatter extends ValueFormatter {
+    private String TAG = XLineValueFormatter.class.getSimpleName();
     private final DecimalFormat mFormat;
     private List<List<String>> allLine;
 
 
-    public LineValueFormatter(List<List<String>> allLine) {
+    public XLineValueFormatter(List<List<String>> allLine) {
         mFormat = new DecimalFormat("##0.0");
         this.allLine = allLine;
 

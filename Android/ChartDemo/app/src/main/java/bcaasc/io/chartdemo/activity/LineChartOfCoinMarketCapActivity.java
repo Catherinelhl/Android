@@ -8,7 +8,6 @@ import android.view.*;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.DetailOfCoinMarketCap;
@@ -42,7 +41,9 @@ import com.github.mikephil.charting.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bcaasc.io.chartdemo.tool.DateFormatTool.*;
+import static bcaasc.io.chartdemo.tool.DateFormatTool.getPastTimeOfEndByCycleTime;
+import static bcaasc.io.chartdemo.tool.DateFormatTool.getPastTimeOfStartByCycleTime;
+import static bcaasc.io.chartdemo.tool.DateFormatTool.getUTCDateForAMPMFormat2;
 
 /**
  * 多数据
@@ -104,7 +105,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         cycleTime.add(Constants.CycleTime.oneMonth);
         cycleTime.add(Constants.CycleTime.threeMonth);
         cycleTime.add(Constants.CycleTime.oneYear);
-        cycleTime.add(Constants.CycleTime.YTD);
+        cycleTime.add(Constants.CycleTime.YTD);//年初至今
         cycleTime.add(Constants.CycleTime.ALL);
         //初始化RadioGroup信息
         for (int i = 0; i < cycleTime.size(); i++) {
@@ -137,9 +138,11 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
                         case oneYear:
                             startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
                             break;
-                        case YTD:
-                            endTime = getPastTimeOfEndByCycleTime(cycleTimeType).getTime();
-                            startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
+                        case YTD:// 年初至今
+//                            endTime = getPastTimeOfEndByCycleTime(cycleTimeType).getTime();
+//                            startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
+                            startTime = DateFormatTool.getCurrentYearStartTime().getTime();
+                            LogTool.d(TAG, "startTime:" + getUTCDateForAMPMFormat2(String.valueOf(startTime)));
                             break;
                         case ALL:
                             endTime = 0l;
@@ -153,10 +156,10 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         }
         presenter = new LineChartOfCoinMarketCapPresenterImp(this);
         presenter.getLists();
-        requestDetaillOfCurrency(Constants.CycleTime.ALL);
+        requestDetailOfCurrency(Constants.CycleTime.ALL);
     }
 
-    private void requestDetaillOfCurrency(Constants.CycleTime timeType) {
+    private void requestDetailOfCurrency(Constants.CycleTime timeType) {
         long endTime = System.currentTimeMillis();
         long startTime = endTime - 60 * 60 * 1000;
 
@@ -278,7 +281,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 //////        chart.setAutoScaleMinMaxEnabled(true);
 
         //自定义一个底部显示内容格式化
-        ValueFormatter custom = new LineValueFormatter(priceUSD);
+        ValueFormatter custom = new XLineValueFormatter(priceUSD);
+        ValueFormatter yLineValueFormatter = new YLineValueFormatter(priceUSD);
         {   // // Chart Style // //
             // background color
             chart.setBackgroundColor(Color.WHITE);
@@ -317,7 +321,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
             // vertical grid lines
             xAxis.enableGridDashedLine(10f, 10f, 0f);
-//            // 如果当前没有数据返回，那么就是用默认的
+            // 如果当前没有数据返回，那么就是用默认的
             if (priceUSD != null && priceUSD.size() > 0) {
                 xAxis.setValueFormatter(custom);
             }
@@ -330,7 +334,10 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
             // disable dual axis (only use LEFT axis)
             chart.getAxisRight().setEnabled(false);
-
+            // 如果当前没有数据返回，那么就是用默认的
+            if (priceUSD != null && priceUSD.size() > 0) {
+                yAxis.setValueFormatter(yLineValueFormatter);
+            }
             // horizontal grid lines
             yAxis.enableGridDashedLine(10f, 10f, 0f);
 

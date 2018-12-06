@@ -17,12 +17,13 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        System.out.println(sdf.format(System.currentTimeMillis()));
         sdf.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
+        System.out.println("----:"+sdf.format(getCurrentYearStartTime()));
         System.out.println(sdf.format(getStartTime()));
         System.out.println(sdf.format(getEndTime()));
         System.out.println(DateFormatTool.getUTCDateForAMPMFormat2(String.valueOf(getBeginDayOfYesterday().getTime())));
         System.out.println(DateFormatTool.getUTCDateForAMPMFormat2(String.valueOf(getEndDayOfYesterday().getTime())));
+        System.out.println("---"+DateFormatTool.getUTCDateForAMPMFormat2(String.valueOf(getCurrentYearStartTime().getTime())));
     }
 
     private static Date getStartTime() {
@@ -63,6 +64,30 @@ public class Test {
         cal.add(Calendar.YEAR, -1);
         System.out.println(DateFormatTool.getUTCDateForAMPMFormat2(String.valueOf(cal.getTimeInMillis())));
         return cal.getTime();
+    }
+
+    /**
+     * 当前年的开始时间
+     *
+     * @return
+     */
+    public static Date getCurrentYearStartTime() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
+
+        Date now = null;
+        try {
+            c.set(Calendar.MONTH, 0);
+            c.set(Calendar.DATE, 1);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+         return c.getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return now;
     }
 
 }
