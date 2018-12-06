@@ -14,18 +14,11 @@
                       android:orientation="vertical"
                       android:layout_weight="1">
             <TextView
-                    android:id="@+id/tv_open"
-                    android:layout_width="wrap_content"
-                    android:text="Open:"
-                    android:layout_marginTop="3sp"
-                    android:layout_height="wrap_content"/>
-            <TextView
-                    android:id="@+id/tv_close"
+                    android:id="@+id/tv_value_usd"
                     android:minWidth="100dp"
-                    android:layout_marginTop="3sp"
-                    android:text="Close:"
-
                     android:layout_width="wrap_content"
+                    android:text="USD:"
+                    android:layout_marginTop="3sp"
                     android:layout_height="wrap_content"/>
             <TextView
                     android:id="@+id/tv_volume"
@@ -46,23 +39,17 @@
                       android:layout_height="match_parent"
                       android:orientation="vertical"
                       android:layout_weight="1">
+
             <TextView
-                    android:id="@+id/tv_high"
-                    android:minWidth="100dp"
-                    android:layout_width="wrap_content"
-                    android:text="High:"
-                    android:layout_marginTop="3sp"
-                    android:layout_height="wrap_content"/>
-            <TextView
-                    android:id="@+id/tv_low"
-                    android:text="Low:"
+                    android:id="@+id/tv_value_btc"
+                    android:text="BTC:"
                     android:layout_marginTop="3sp"
                     android:minWidth="100dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             <TextView
-                    android:id="@+id/tv_number"
-                    android:text="Number:"
+                    android:id="@+id/tv_value_market"
+                    android:text="MarketValue:"
                     android:layout_marginTop="3sp"
                     android:minWidth="100dp"
                     android:layout_width="wrap_content"
@@ -70,6 +57,13 @@
         </LinearLayout>
 
     </LinearLayout>
+    <RadioGroup
+            android:id="@+id/rg_cycle_time"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="48dp">
+
+    </RadioGroup>
 
     <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/line_chart"

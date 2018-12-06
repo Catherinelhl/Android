@@ -4,23 +4,21 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.WindowManager;
+import android.view.*;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.DetailOfCoinMarketCap;
 import bcaasc.io.chartdemo.bean.KLineBean;
 import bcaasc.io.chartdemo.bean.ListOfCoinMarketCap;
+import bcaasc.io.chartdemo.constants.Constants;
 import bcaasc.io.chartdemo.contract.LineOfCoinMarketCapContract;
 import bcaasc.io.chartdemo.listener.ChartMarkerViewListener;
 import bcaasc.io.chartdemo.presenter.LineChartOfCoinMarketCapPresenterImp;
-import bcaasc.io.chartdemo.tool.DemoBase;
-import bcaasc.io.chartdemo.tool.LineValueFormatter;
-import bcaasc.io.chartdemo.tool.LogTool;
-import bcaasc.io.chartdemo.tool.ValueMarkerView;
+import bcaasc.io.chartdemo.tool.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.github.mikephil.charting.charts.BarChart;
@@ -44,6 +42,8 @@ import com.github.mikephil.charting.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bcaasc.io.chartdemo.tool.DateFormatTool.*;
+
 /**
  * 多数据
  * <p>
@@ -52,25 +52,22 @@ import java.util.List;
 
 public class LineChartOfCoinMarketCapActivity extends DemoBase
         implements OnChartValueSelectedListener, LineOfCoinMarketCapContract.View {
+    @BindView(R.id.tv_value_usd)
+    TextView tvValueUsd;
+    @BindView(R.id.tv_volume)
+    TextView tvVolume;
+    @BindView(R.id.tv_timer)
+    TextView tvTimer;
+    @BindView(R.id.tv_value_btc)
+    TextView tvValueBtc;
+    @BindView(R.id.tv_value_market)
+    TextView tvValueMarket;
+    private String TAG = LineChartOfCoinMarketCapActivity.class.getSimpleName();
 
     @BindView(R.id.line_chart)
     LineChart chart;
-    private String TAG = LineChartOfCoinMarketCapActivity.class.getSimpleName();
-
-    @BindView(R.id.tv_open)
-    TextView tvOpen;
-    @BindView(R.id.tv_high)
-    TextView tvHigh;
-    @BindView(R.id.tv_close)
-    TextView tvClose;
-    @BindView(R.id.tv_low)
-    TextView tvLow;
-    @BindView(R.id.tv_volume)
-    TextView tvVolume;
-    @BindView(R.id.tv_number)
-    TextView tvNumber;
-    @BindView(R.id.tv_timer)
-    TextView tvTimer;
+    @BindView(R.id.rg_cycle_time)
+    RadioGroup rgCycleTime;
     @BindView(R.id.chart_bar)
     BarChart chartBar;
 
@@ -81,6 +78,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     private List<List<String>> volumeUSD = new ArrayList<>();
     private List<List<String>> priceBTC = new ArrayList<>();
     private List<List<String>> priceUSD = new ArrayList<>();
+    private List<Constants.CycleTime> cycleTime = new ArrayList<>();
+    String coinName = "bitcoin";
 
     private LineChartOfCoinMarketCapPresenterImp presenter;
 
@@ -96,15 +95,73 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         initListener();
     }
 
+
     private void initView() {
         setTitle("LineChartOfCoinMarketCapActivity");
+        //初始化所有时间段选择
+        cycleTime.add(Constants.CycleTime.oneDay);
+        cycleTime.add(Constants.CycleTime.sevenDay);
+        cycleTime.add(Constants.CycleTime.oneMonth);
+        cycleTime.add(Constants.CycleTime.threeMonth);
+        cycleTime.add(Constants.CycleTime.oneYear);
+        cycleTime.add(Constants.CycleTime.YTD);
+        cycleTime.add(Constants.CycleTime.ALL);
+        //初始化RadioGroup信息
+        for (int i = 0; i < cycleTime.size(); i++) {
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(cycleTime.get(i).getName());
+            rgCycleTime.addView(radioButton);
+            final int finalI = i;
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Constants.CycleTime cycleTimeType = cycleTime.get(finalI);
+                    long endTime = System.currentTimeMillis();
+                    long startTime = 0l;
+
+                    switch (cycleTimeType) {
+
+                        case oneDay:
+                            startTime = endTime - 24 * 60 * 60 * 1000;
+                            break;
+                        case sevenDay:
+                            startTime = endTime - 24 * 7 * 60 * 60 * 1000;
+                            break;
+                        case oneMonth:
+                            startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
+
+                            break;
+                        case threeMonth:
+                            startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
+                            break;
+                        case oneYear:
+                            startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
+                            break;
+                        case YTD:
+                            endTime = getPastTimeOfEndByCycleTime(cycleTimeType).getTime();
+                            startTime = getPastTimeOfStartByCycleTime(cycleTimeType).getTime();
+                            break;
+                        case ALL:
+                            endTime = 0l;
+                            startTime = 0l;
+                            break;
+
+                    }
+                    presenter.getLineOfCoinMarketCap(coinName, startTime == 0 ? null : String.valueOf(startTime), endTime == 0 ? null : String.valueOf(endTime));
+                }
+            });
+        }
         presenter = new LineChartOfCoinMarketCapPresenterImp(this);
         presenter.getLists();
-        String coinName = "bitcoin";
+        requestDetaillOfCurrency(Constants.CycleTime.ALL);
+    }
+
+    private void requestDetaillOfCurrency(Constants.CycleTime timeType) {
         long endTime = System.currentTimeMillis();
         long startTime = endTime - 60 * 60 * 1000;
 
 //        presenter.getLineOfCoinMarketCap(coinName, String.valueOf(startTime), String.valueOf(endTime));
+        //默认调用BitCoin全部的数据
         presenter.getLineOfCoinMarketCap(coinName, null, null);
 
     }
@@ -209,16 +266,16 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 //        xAxis.setAxisMinimum(data.getXMin() - 0.5f);
 //
 //        //设置内容显示自定义数据
-//        BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
-//        mv.setChartMarkerViewListener(chartMarkerViewListener);
-//        mv.setChartView(chart); // For bounds control
-//        chart.setMarker(mv); // Set the marker to the chart
-//        chart.setData(data);
-//        chart.invalidate();
-//        // 设置X放大的最小显示个数
-//        chart.setVisibleXRangeMinimum(5);
-//        //设置可以自动scale
-//        chart.setAutoScaleMinMaxEnabled(true);
+//////        BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
+//////        mv.setChartMarkerViewListener(chartMarkerViewListener);
+//////        mv.setChartView(chart); // For bounds control
+//////        chart.setMarker(mv); // Set the marker to the chart
+//////        chart.setData(data);
+//////        chart.invalidate();
+//////        // 设置X放大的最小显示个数
+//////        chart.setVisibleXRangeMinimum(5);
+//////        //设置可以自动scale
+//////        chart.setAutoScaleMinMaxEnabled(true);
 
         //自定义一个底部显示内容格式化
         ValueFormatter custom = new LineValueFormatter(priceUSD);
@@ -420,14 +477,14 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
         @Override
         public void getIndex(int index) {
-            if (priceUSD != null && priceUSD.size() > 0) {
-                if (index < priceUSD.size()) {
-                    List<String> bean = priceUSD.get(index);
-                    //显示当前数据
-                    tvOpen.setText("time: " + bean.get(0));
-                    tvClose.setText("Value: " + bean.get(1));
-                }
-            }
+//            if (priceUSD != null && priceUSD.size() > 0) {
+//                if (index < priceUSD.size()) {
+//                    List<String> bean = priceUSD.get(index);
+//                    //显示当前数据
+//                    tvTimer.setText("time: " + bean.get(0));
+//                    t.setText("Value: " + bean.get(1));
+//                }
+//            }
         }
     };
 
@@ -486,6 +543,25 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {
+        int index = (int) e.getX();
+        if (priceUSD != null) {
+            tvTimer.setText("Time: " + DateFormatTool.getUTCDateForAMPMFormat2(priceUSD.get(index).get(0)));
+            tvValueUsd.setText("USD: " + priceUSD.get(index).get(1));
+        }
+        if (priceBTC != null) {
+//            tvLow.setText("Time:" + priceBTC.get(index).get(0));
+            tvValueBtc.setText("BTC:" + priceBTC.get(index).get(1));
+        }
+
+        if (volumeUSD != null) {
+//            tvNumber.setText("Time:" + volumeUSD.get(index).get(0));
+            tvVolume.setText("Volume:" + volumeUSD.get(index).get(1));
+        }
+        if (lineBeans != null) {
+            tvValueMarket.setText("Market USD:" + lineBeans.get(index).get(1));
+
+        }
+
         LogTool.i(TAG, "Entry selected:" + e.toString());
         LogTool.i(TAG, "low: " + chart.getLowestVisibleX() + ", high: " + chart.getHighestVisibleX());
         LogTool.i(TAG, "MIN MAX xMin: " + chart.getXChartMin() + ", xMax: " + chart.getXChartMax() + ", yMin: " + chart.getYChartMin() + ", yMax: " + chart.getYChartMax());
@@ -499,6 +575,12 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
 
     private void initListener() {
+        rgCycleTime.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+            }
+        });
         chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 
             @Override

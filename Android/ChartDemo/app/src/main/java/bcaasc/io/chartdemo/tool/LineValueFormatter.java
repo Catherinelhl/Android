@@ -30,7 +30,6 @@ public class LineValueFormatter extends ValueFormatter {
 
     @Override
     public String getAxisLabel(float value, AxisBase axis) {
-//        if (axis instanceof XAxis) {
         if (allLine == null || allLine.size() == 0) {
             return mFormat.format(value);
         } else {
@@ -41,14 +40,5 @@ public class LineValueFormatter extends ValueFormatter {
                 return mFormat.format(value);
             }
         }
-//        } else if (value > 0) {
-//            try {
-//                return DateFormatTool.getUTCDateForAMPMFormat(mFormat.format(value) + "cc");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            return mFormat.format(value) + "dd";
-//        }
     }
 }
