@@ -33,7 +33,7 @@ public class ValueMarkerView extends MarkerView {
     public ValueMarkerView(Context context, ValueFormatter valueFormatter) {
         super(context, R.layout.custom_marker_view);
 
-        this.valueFormatter =  valueFormatter;
+        this.valueFormatter = valueFormatter;
         tvContent = findViewById(R.id.tvContent);
         format = new DecimalFormat("###.0");
     }
@@ -46,8 +46,10 @@ public class ValueMarkerView extends MarkerView {
     // content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        this.chartMarkerViewListener.getIndex((int) e.getX());
-        tvContent.setText( valueFormatter.getFormattedValue(e.getX()) + "\n" + format.format(e.getY()));
+        if (chartMarkerViewListener != null) {
+            this.chartMarkerViewListener.getIndex((int) e.getX());
+        }
+        tvContent.setText(valueFormatter.getFormattedValue(e.getX()) + "\n" + format.format(e.getY()));
 
         super.refreshContent(e, highlight);
     }

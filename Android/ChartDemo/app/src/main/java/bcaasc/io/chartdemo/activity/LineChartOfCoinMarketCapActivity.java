@@ -53,6 +53,8 @@ import static bcaasc.io.chartdemo.tool.DateFormatTool.getUTCDateForAMPMFormat2;
 
 public class LineChartOfCoinMarketCapActivity extends DemoBase
         implements OnChartValueSelectedListener, LineOfCoinMarketCapContract.View {
+    private String TAG = LineChartOfCoinMarketCapActivity.class.getSimpleName();
+
     @BindView(R.id.tv_value_usd)
     TextView tvValueUsd;
     @BindView(R.id.tv_volume)
@@ -63,8 +65,6 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     TextView tvValueBtc;
     @BindView(R.id.tv_value_market)
     TextView tvValueMarket;
-    private String TAG = LineChartOfCoinMarketCapActivity.class.getSimpleName();
-
     @BindView(R.id.line_chart)
     LineChart chart;
     @BindView(R.id.rg_cycle_time)
@@ -74,12 +74,19 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
     //用来得到数据获取之后的条数
     private int count;
-    //用来得到所有的数据
-    private List<List<String>> lineBeans = new ArrayList<>();
+    //存储当前currency市值
+    private List<List<String>> valueMarket = new ArrayList<>();
+    //存储当前currency交易量
     private List<List<String>> volumeUSD = new ArrayList<>();
+    //存储当前currency以BTC为参考
     private List<List<String>> priceBTC = new ArrayList<>();
+    //存储当前currency以USD为参照物
     private List<List<String>> priceUSD = new ArrayList<>();
+    //存储当前可以切换的时间选择
     private List<Constants.CycleTime> cycleTime = new ArrayList<>();
+    //存储当前new出的所有RadioButton
+    private List<RadioButton> radioButtons = new ArrayList<>();
+    //默认当前的币种为bitCoin
     String coinName = "bitcoin";
 
     private LineChartOfCoinMarketCapPresenterImp presenter;
@@ -87,6 +94,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_line);
@@ -99,6 +107,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
     private void initView() {
         setTitle("LineChartOfCoinMarketCapActivity");
+        presenter = new LineChartOfCoinMarketCapPresenterImp(this);
+        presenter.getLists();
         //初始化所有时间段选择
         cycleTime.add(Constants.CycleTime.oneDay);
         cycleTime.add(Constants.CycleTime.sevenDay);
@@ -111,6 +121,16 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         for (int i = 0; i < cycleTime.size(); i++) {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(cycleTime.get(i).getName());
+            radioButton.setGravity(Gravity.CENTER);
+            radioButtons.add(radioButton);
+            if (i == 0) {
+                radioButton.setBackground(getResources().getDrawable(R.drawable.selector_black_left_style));
+            } else if (i == cycleTime.size() - 1) {
+                radioButton.setBackground(getResources().getDrawable(R.drawable.selector_black_right_style));
+            } else {
+                radioButton.setBackground(getResources().getDrawable(R.drawable.selector_black_middle_style));
+            }
+            radioButton.setButtonDrawable(null);
             rgCycleTime.addView(radioButton);
             final int finalI = i;
             radioButton.setOnClickListener(new View.OnClickListener() {
@@ -148,27 +168,24 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
                             endTime = 0l;
                             startTime = 0l;
                             break;
-
                     }
                     presenter.getLineOfCoinMarketCap(coinName, startTime == 0 ? null : String.valueOf(startTime), endTime == 0 ? null : String.valueOf(endTime));
                 }
             });
         }
-        presenter = new LineChartOfCoinMarketCapPresenterImp(this);
-        presenter.getLists();
-        requestDetailOfCurrency(Constants.CycleTime.ALL);
-    }
-
-    private void requestDetailOfCurrency(Constants.CycleTime timeType) {
-        long endTime = System.currentTimeMillis();
-        long startTime = endTime - 60 * 60 * 1000;
-
-//        presenter.getLineOfCoinMarketCap(coinName, String.valueOf(startTime), String.valueOf(endTime));
-        //默认调用BitCoin全部的数据
+        //默认获取所有的数据信息
         presenter.getLineOfCoinMarketCap(coinName, null, null);
-
+        //遍历当前的所有的cycleTime选项，然后默认指向all最后一个
+        for (int i = 0; i < radioButtons.size(); i++) {
+            if (i == radioButtons.size() - 1) {
+                radioButtons.get(i).setChecked(true);
+            }
+        }
     }
 
+    /**
+     * 初始化线性图表¬
+     */
     private void initChart() {
 //        //右下角对图表的描述信息
 //        chart.getDescription().setEnabled(false);
@@ -301,7 +318,6 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
             // create marker to display box when values are selected
             // Set the marker to the chart
             ValueMarkerView mv = new ValueMarkerView(this, custom);
-            mv.setChartMarkerViewListener(chartMarkerViewListener);
             mv.setChartView(chart);
             chart.setMarker(mv);
 
@@ -475,26 +491,6 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         }
     }
 
-
-    private ChartMarkerViewListener chartMarkerViewListener = new ChartMarkerViewListener() {
-        @Override
-        public void getKLineBean(Entry entry, Highlight highlight, KLineBean kLineBean) {
-
-        }
-
-        @Override
-        public void getIndex(int index) {
-//            if (priceUSD != null && priceUSD.size() > 0) {
-//                if (index < priceUSD.size()) {
-//                    List<String> bean = priceUSD.get(index);
-//                    //显示当前数据
-//                    tvTimer.setText("time: " + bean.get(0));
-//                    t.setText("Value: " + bean.get(1));
-//                }
-//            }
-        }
-    };
-
     /**
      * 创建柱形图
      *
@@ -564,8 +560,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 //            tvNumber.setText("Time:" + volumeUSD.get(index).get(0));
             tvVolume.setText("Volume:" + volumeUSD.get(index).get(1));
         }
-        if (lineBeans != null) {
-            tvValueMarket.setText("Market USD:" + lineBeans.get(index).get(1));
+        if (valueMarket != null) {
+            tvValueMarket.setText("Market USD:" + valueMarket.get(index).get(1));
 
         }
 
@@ -715,12 +711,12 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         if (detailOfCoinMarketCap == null) {
             return;
         }
-        lineBeans = detailOfCoinMarketCap.getMarket_cap_by_available_supply();
-        if (lineBeans == null || lineBeans.size() <= 0) {
+        valueMarket = detailOfCoinMarketCap.getMarket_cap_by_available_supply();
+        if (valueMarket == null || valueMarket.size() <= 0) {
             return;
         }
-        count = lineBeans.size();
-        LogTool.d(TAG, "lineBean:" + lineBeans);
+        count = valueMarket.size();
+        LogTool.d(TAG, "lineBean:" + valueMarket);
         priceBTC = detailOfCoinMarketCap.getPrice_btc();
         LogTool.d(TAG, "priceBTC:" + priceBTC);
         priceUSD = detailOfCoinMarketCap.getPrice_usd();

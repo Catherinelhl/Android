@@ -61,6 +61,8 @@
             android:id="@+id/rg_cycle_time"
             android:layout_width="match_parent"
             android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:layout_height="48dp">
 
     </RadioGroup>
