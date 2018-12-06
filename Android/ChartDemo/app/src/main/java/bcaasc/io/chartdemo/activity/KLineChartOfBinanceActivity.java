@@ -37,13 +37,13 @@ import java.util.List;
 /**
  * 多数据
  * <p>
- * 接入币安真实数据
+ * 接入币安：Binance真实数据
  */
 
-public class BCAASCKLineChartActivity extends DemoBase
+public class KLineChartOfBinanceActivity extends DemoBase
         implements OnChartValueSelectedListener, BcaasCChartContract.View {
 
-    private String TAG = BCAASCKLineChartActivity.class.getSimpleName();
+    private String TAG = KLineChartOfBinanceActivity.class.getSimpleName();
 
     @BindView(R.id.tv_open)
     TextView tvOpen;
@@ -89,7 +89,7 @@ public class BCAASCKLineChartActivity extends DemoBase
     }
 
     private void initView() {
-        setTitle("BCAASCKLineChartActivity");
+        setTitle("KLineChartOfBinanceActivity");
         presenter = new BcaasCChartPresenterImp(this);
         presenter.getKLine();
 

@@ -13,4 +13,29 @@ public class Constants {
     public static final long SleepTime800 = 800;
     public static final String APIKEY = "";
 
-   }
+    /*cycle time to choose*/
+    public enum CycleTime {
+        oneDay("1D"),
+        sevenDay("7D"),
+        oneMonth("1M"),
+        threeMonth("3M"),
+        oneYear("1Y"),
+        YTD("YTD"),
+        ALL("ALL");
+
+        CycleTime(String s) {
+            this.name = s;
+        }
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+}

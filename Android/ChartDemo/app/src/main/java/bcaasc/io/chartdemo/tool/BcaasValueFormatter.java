@@ -18,6 +18,7 @@ public class BcaasValueFormatter extends ValueFormatter {
 
     }
 
+
     @Override
     public String getFormattedValue(float value) {
         if (allKLine == null || allKLine.size() == 0) {

@@ -3,7 +3,7 @@ package bcaasc.io.chartdemo.presenter;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import bcaasc.io.chartdemo.contract.BcaasCChartContract;
-import bcaasc.io.chartdemo.http.BcaasCInteractor;
+import bcaasc.io.chartdemo.interactor.BcaasCInteractor;
 import bcaasc.io.chartdemo.tool.LogTool;
 import org.json.JSONArray;
 import org.json.JSONException;

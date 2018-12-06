@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class RetrofitFactory {
 
     private static Retrofit instance;
+    private static Retrofit coinMarketCapInstance;//coinMarketCap  服务器连接
     private static OkHttpClient client;
 
 
