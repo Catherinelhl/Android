@@ -1,6 +1,5 @@
 package bcaasc.io.chartdemo.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
@@ -12,11 +11,9 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.DetailOfCoinMarketCap;
-import bcaasc.io.chartdemo.bean.KLineBean;
 import bcaasc.io.chartdemo.bean.ListOfCoinMarketCap;
 import bcaasc.io.chartdemo.constants.Constants;
 import bcaasc.io.chartdemo.contract.LineOfCoinMarketCapContract;
-import bcaasc.io.chartdemo.listener.ChartMarkerViewListener;
 import bcaasc.io.chartdemo.presenter.LineChartOfCoinMarketCapPresenterImp;
 import bcaasc.io.chartdemo.tool.*;
 import butterknife.BindView;
@@ -42,7 +39,6 @@ import com.github.mikephil.charting.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bcaasc.io.chartdemo.tool.DateFormatTool.getPastTimeOfEndByCycleTime;
 import static bcaasc.io.chartdemo.tool.DateFormatTool.getPastTimeOfStartByCycleTime;
 import static bcaasc.io.chartdemo.tool.DateFormatTool.getUTCDateForAMPMFormat2;
 
@@ -91,6 +87,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     String coinName;
 
     private LineChartOfCoinMarketCapPresenterImp presenter;
+    //得到当前币种所有的信息
+    private DetailOfCoinMarketCap detailOfCoinMarketCap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,117 +190,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     /**
      * 初始化线性图表¬
      */
-    private void initChart() {
-//        //右下角对图表的描述信息
-//        chart.getDescription().setEnabled(false);
-//        // 是否绘制背景颜色
-//        chart.setDrawGridBackground(false);
-//        //是否绘制背景阴影
-//        chart.setDrawBarShadow(false);
-//        //是否绘制边线
-//        chart.setDrawBorders(true);
-//        //边线宽度，单位dp
-//        chart.setBorderWidth(1f);
-//        //边线颜色
-//        chart.setBorderColor(getResources().getColor(R.color.border_color));
-//        //是否不开启硬件加速
-//        chart.setHardwareAccelerationEnabled(true);
-//        //设置上下内边距
-//        chart.setMinOffset(0f);
-//        //图标周围格额外的偏移量
-//        chart.setExtraOffsets(10f, 0f, 10f, 0f);
-////        chartBar.setExtraLeftOffset(10f);
-////        chartBar.setExtraRightOffset(10f);
-//        //启用图表拖拽事件
-//        chart.setDragEnabled(true);
-//        //设置Y轴方向不能滑动
-//        chart.setScaleYEnabled(false);
-//        //是否开启highLight
-//        chart.setHi(false);
-//        // draw bars behind lines
-//        chart.setDrawOrder(new DrawOrder[]{
-//                DrawOrder.CANDLE, DrawOrder.LINE
-//        });
-//        //主要控制左下方的图例的
-//        Legend l = chart.getLegend();
-//        //是否绘制 Legend 图例
-//        l.setEnabled(true);
-//        l.setWordWrapEnabled(true);
-//        //设置位于Chart上面
-//        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-//        //设置位于Chart左边
-//        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-//        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-//        // 设置在chart外部
-//        l.setDrawInside(false);
-//
-//        //开始定制右轴
-//        YAxis rightAxis = chart.getAxisRight();
-//        rightAxis.setDrawGridLines(true);
-//        // 设置不需要 Labels
-//        rightAxis.setDrawLabels(true);
-//        //设置Y轴坐标位置显示
-//        rightAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-//        //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
-//        rightAxis.enableGridDashedLine(10f, 10f, 0f);
-//
-//
-//        //开始定制左轴
-//        YAxis leftAxis = chart.getAxisLeft();
-//        //是否绘制Grid Line
-//        leftAxis.setDrawGridLines(false);
-//        //是否设置坐标参数
-//        leftAxis.setDrawLabels(false);
-//        //设置Y轴左边参数位置
-//        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-//        //第一个参数是Y轴坐标的个数，第二个参数是 是否不均匀分布，true是不均匀分布
-////        leftAxis.setLabelCount(5, false);
-//
-//        //X轴
-//        XAxis xAxis = chart.getXAxis();
-//        //设置X轴的信息显示在底部
-//        xAxis.setPosition(XAxisPosition.BOTTOM);
-//        xAxis.setDrawGridLines(false);
-//        // 设置不显示label
-//        xAxis.setDrawLabels(false);
-//        //设置不显示X轴的下标线
-//        xAxis.setDrawAxisLine(false);
-//        //绘制成虚线，只有在关闭硬件加速的情况下才能使用
-//        xAxis.enableGridDashedLine(10f, 10f, 0f);
-//        //自定义一个底部显示内容格式化
-//        ValueFormatter custom = new BcaasValueFormatter(kLineBeans);
-//        // 如果当前没有数据返回，那么就是用默认的
-//        if (kLineBeans != null && kLineBeans.size() > 0) {
-//            xAxis.setValueFormatter(custom);
-//        }
-//        //在缩放时为轴设置最小间隔。轴不允许低于那个限度。这可以用来避免缩放时的标签复制。
-//        xAxis.setGranularity(1f);
-//
-//        //声明一个加载曲线图和K线图的容器
-//        CombinedData data = new CombinedData();
-//        //添加K线图
-//        data.setData(generateKLineData());
-//        //添加均线图
-//        data.setData(generateLineData());
-//        //设置字体
-//        data.setValueTypeface(tfLight);
-//
-//        //设置内容偏移量，否则first one & last one内容吗会被截掉
-//        xAxis.setAxisMaximum(data.getXMax() + 0.5f);
-//        xAxis.setAxisMinimum(data.getXMin() - 0.5f);
-//
-//        //设置内容显示自定义数据
-//////        BcaasMarkerView mv = new BcaasMarkerView(this, custom, true);
-//////        mv.setChartMarkerViewListener(chartMarkerViewListener);
-//////        mv.setChartView(chart); // For bounds control
-//////        chart.setMarker(mv); // Set the marker to the chart
-//////        chart.setData(data);
-//////        chart.invalidate();
-//////        // 设置X放大的最小显示个数
-//////        chart.setVisibleXRangeMinimum(5);
-//////        //设置可以自动scale
-//////        chart.setAutoScaleMinMaxEnabled(true);
-
+    private void initLineChart() {
         //自定义一个底部显示内容格式化
         ValueFormatter custom = new XLineValueFormatter(priceUSD);
         ValueFormatter yLineValueFormatter = new YLineValueFormatter(priceUSD);
@@ -323,7 +211,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
             // create marker to display box when values are selected
             // Set the marker to the chart
-            ValueMarkerView mv = new ValueMarkerView(this, custom);
+            ValueMarkerView mv = new ValueMarkerView(this, detailOfCoinMarketCap, custom);
             mv.setChartView(chart);
             chart.setMarker(mv);
 
@@ -480,7 +368,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
             // set color of filled area
             if (Utils.getSDKInt() >= 18) {
                 // drawables only supported on api level 18 and above
-                Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_launcher_background);
+                Drawable drawable = ContextCompat.getDrawable(this, R.drawable.bg_button);
                 set1.setFillDrawable(drawable);
             } else {
                 set1.setFillColor(Color.BLACK);
@@ -517,7 +405,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
                     entries.add(new BarEntry(index, Float.valueOf(volumeUSD.get(index).get(1))));
                 }
                 //设置柱形图数据属性
-                set = new BarDataSet(entries, "ETH");
+                set = new BarDataSet(entries, "BTC");
                 set.setColor(Color.rgb(60, 220, 78));
                 set.setValueTextColor(Color.rgb(60, 220, 78));
                 set.setValueTextSize(10f);
@@ -608,11 +496,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
 
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                h.setDataIndex(1);
-                h.setmDataSetIndex(0);
-                chart.highlightValues(new Highlight[]{h});
-                chart.getMarker().refreshContent(e, h);
-                chart.notifyDataSetChanged();
+                chart.highlightValue(h);
                 chart.invalidate();
             }
 
@@ -712,11 +596,13 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         });
     }
 
+
     @Override
     public void getLineSuccess(DetailOfCoinMarketCap detailOfCoinMarketCap) {
         if (detailOfCoinMarketCap == null) {
             return;
         }
+        this.detailOfCoinMarketCap = detailOfCoinMarketCap;
         valueMarket = detailOfCoinMarketCap.getMarket_cap_by_available_supply();
         if (valueMarket == null || valueMarket.size() <= 0) {
             return;
@@ -729,7 +615,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         LogTool.d(TAG, "priceUSD:" + priceUSD);
         volumeUSD = detailOfCoinMarketCap.getVolume_usd();
         LogTool.d(TAG, "volumeUSD:" + volumeUSD);
-        initChart();
+        initLineChart();
+        initBarChart();
     }
 
     @Override
@@ -745,6 +632,107 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     @Override
     public void getListFailure(String info) {
         LogTool.e(TAG, info);
+
+    }
+
+
+    private void initBarChart() {
+        //设置bar是否显示区间有阴影
+        chartBar.setDrawBarShadow(false);
+        //是否开启在图形上面显示value
+        chartBar.setDrawValueAboveBar(false);
+        // 设置Y轴不可放大
+        chartBar.setScaleYEnabled(false);
+        //是否绘制边线
+        chartBar.setDrawBorders(true);
+        //边线宽度，单位dp
+        chartBar.setBorderWidth(1f);
+        chartBar.getDescription().setEnabled(false);
+        //设置上下内边距
+        chartBar.setMinOffset(0f);
+        //图标周围格额外的偏移量
+        chartBar.setExtraOffsets(10f, 0f, 10f, 10f);
+
+
+        // if more than 60 entries are displayed in the chart, no values will be
+        // drawn
+        //chartBar.setMaxVisibleValueCount(60);
+
+        // scaling can now only be done on x- and y-axis separately
+        chartBar.setPinchZoom(false);
+
+        chartBar.setDrawGridBackground(false);
+
+        //设置下坐标
+        XAxis xAxis = chartBar.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        ValueFormatter custom = new XLineValueFormatter(priceUSD);
+        ValueFormatter yLineValueFormatter = new YLineValueFormatter(volumeUSD);
+
+        if (priceUSD != null && priceUSD.size() > 0) {
+            xAxis.setValueFormatter(custom);
+        }
+
+
+        //设置文字样式
+//        xAxis.setTypeface(tfLight);
+        //是否绘制基准线
+        xAxis.setDrawGridLines(false);
+        // only intervals of 1 day
+        xAxis.setGranularity(1f);
+        //设置x轴坐标的数量
+        xAxis.setLabelCount(7);
+
+
+        YAxis leftAxis = chartBar.getAxisLeft();
+        if (volumeUSD != null && volumeUSD.size() > 0) {
+            leftAxis.setValueFormatter(yLineValueFormatter);
+        }
+//        leftAxis.setTypeface(tfLight);
+        //  leftAxis.setLabelCount(8, false);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        //  leftAxis.setSpaceTop(15f);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setDrawLabels(true);
+        //虚线表示Y轴上的刻度竖线(float lineLength, float spaceLength, float phase)三个参数，1.线长，2.虚线间距，3.虚线开始坐标  当setDrawGridLines为true才有用
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        // this replaces setStartAtZero(true)
+        //  leftAxis.setAxisMinimum(0f);
+
+        YAxis rightAxis = chartBar.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawLabels(false);
+        rightAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+
+        //设置图例
+        Legend l = chartBar.getLegend();
+        //是否绘制图例
+        l.setEnabled(false);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+        l.setForm(Legend.LegendForm.SQUARE);
+
+        ValueMarkerView mv = new ValueMarkerView(this, detailOfCoinMarketCap, custom);
+        mv.setChartView(chart);
+        // Set the marker to the chart
+        chartBar.setMarker(mv);
+        //设置bar可以自动设置scale缩放
+        chartBar.setAutoScaleMinMaxEnabled(true);
+        //设置barX轴scale至少显示数量
+        chartBar.setVisibleXRangeMinimum(5);
+
+        // 得到当前的柱形图
+        BarData barData = generateBarData();
+        //如果当前是重新生成的BarData，那么就需要重新添加以及重新设置初始数据
+        if (barData != null) {
+            xAxis.setAxisMaximum(barData.getXMax() + 0.5f);
+            xAxis.setAxisMinimum(barData.getXMin() - 0.5f);
+            chartBar.setData(barData);
+        }
+        chartBar.invalidate();
+        chartBar.setOnChartValueSelectedListener(this);
 
     }
 }
