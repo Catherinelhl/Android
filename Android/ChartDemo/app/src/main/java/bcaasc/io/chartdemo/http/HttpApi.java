@@ -1,13 +1,12 @@
 package bcaasc.io.chartdemo.http;
 
+import bcaasc.io.chartdemo.bean.CompleteCurrencyBean;
 import bcaasc.io.chartdemo.bean.DetailOfCoinMarketCap;
 import bcaasc.io.chartdemo.bean.ListOfCoinMarketCap;
+import bcaasc.io.chartdemo.constants.Constants;
 import io.reactivex.Observable;
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 public interface HttpApi {
 
@@ -48,6 +47,14 @@ public interface HttpApi {
     @GET("https://api.coinmarketcap.com/v2/listings")
     Observable<ListOfCoinMarketCap> getCurrencyList();
 
+    /**
+     * 获取更完整加密货币列表
+     *
+     * @return
+     */
+    @GET("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest")
+    Observable<CompleteCurrencyBean> getCompleteCurrencyList(@Header("X-CMC_PRO_API_KEY") String apiKey);
+
 
     /**
      * 获取加密货币的价格、市值、交易量（折线图）
@@ -63,7 +70,7 @@ public interface HttpApi {
                                                           @Path("endTime") String endTime);
 
     /**
-     * 获取加密货币的价格、市值、交易量（折线图）
+     * 获取加密货币的价格、市值、交易量（折线图）,不帶時間點的
      *
      * @param coinName
      * @return

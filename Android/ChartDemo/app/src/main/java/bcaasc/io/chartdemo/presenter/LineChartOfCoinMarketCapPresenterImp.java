@@ -1,6 +1,8 @@
 package bcaasc.io.chartdemo.presenter;
 
+import bcaasc.io.chartdemo.bean.CompleteCurrencyBean;
 import bcaasc.io.chartdemo.bean.DetailOfCoinMarketCap;
+import bcaasc.io.chartdemo.bean.FilterCurrencyListBean;
 import bcaasc.io.chartdemo.bean.ListOfCoinMarketCap;
 import bcaasc.io.chartdemo.contract.LineOfCoinMarketCapContract;
 import bcaasc.io.chartdemo.interactor.BcaasCInteractor;
@@ -9,6 +11,9 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author catherine.brainwilliam
@@ -33,6 +38,10 @@ public class LineChartOfCoinMarketCapPresenterImp implements LineOfCoinMarketCap
 
     @Override
     public void getLineOfCoinMarketCap(String coinName, String startTime, String endTime) {
+        if (coinName == null || coinName == "") {
+            LogTool.e(TAG, "coinName is empty");
+            return;
+        }
         interactor.getLineOfCoinMarketCap(coinName, startTime, endTime)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,27 +67,6 @@ public class LineChartOfCoinMarketCapPresenterImp implements LineOfCoinMarketCap
 
                                }
                            }
-//                new Observer<String>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        getDetailDisposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onNext(String s) {
-//                        LogTool.d(TAG, "getLineOfCoinMarketCap response:" + s);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                }
                 );
     }
 
@@ -108,27 +96,8 @@ public class LineChartOfCoinMarketCapPresenterImp implements LineOfCoinMarketCap
 
                                }
                            }
-//                new Observer<String>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        getListOfCurrencyDisposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onNext(String s) {
-//                        LogTool.d(TAG, "getLists response:" + s);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                }
                 );
     }
+
+
 }

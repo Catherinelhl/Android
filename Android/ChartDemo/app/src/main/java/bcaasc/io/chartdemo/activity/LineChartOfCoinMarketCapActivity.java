@@ -1,5 +1,6 @@
 package bcaasc.io.chartdemo.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
@@ -87,7 +88,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     //存储当前new出的所有RadioButton
     private List<RadioButton> radioButtons = new ArrayList<>();
     //默认当前的币种为bitCoin
-    String coinName = "bitcoin";
+    String coinName;
 
     private LineChartOfCoinMarketCapPresenterImp presenter;
 
@@ -99,7 +100,12 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_line);
         ButterKnife.bind(this);
-
+        Bundle bundle = getIntent().getExtras();
+        coinName = bundle.getString("name");
+        if (coinName == null || coinName == "") {
+            coinName = "bitcoin";
+        }
+        LogTool.d(TAG, coinName);
         initView();
         initListener();
     }
@@ -108,7 +114,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
     private void initView() {
         setTitle("LineChartOfCoinMarketCapActivity");
         presenter = new LineChartOfCoinMarketCapPresenterImp(this);
-        presenter.getLists();
+//        presenter.getLists();
         //初始化所有时间段选择
         cycleTime.add(Constants.CycleTime.oneDay);
         cycleTime.add(Constants.CycleTime.sevenDay);

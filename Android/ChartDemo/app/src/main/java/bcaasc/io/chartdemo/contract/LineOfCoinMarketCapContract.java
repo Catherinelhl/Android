@@ -17,6 +17,7 @@ public interface LineOfCoinMarketCapContract {
         void getLineFailure(String failureInfo);
 
         void getListSuccess(ListOfCoinMarketCap listOfCoinMarketCap);
+
         void getListFailure(String info);
     }
 
@@ -24,5 +25,6 @@ public interface LineOfCoinMarketCapContract {
         void getLineOfCoinMarketCap(String coinName, String startTime, String endTime);
 
         void getLists();
+
     }
 }

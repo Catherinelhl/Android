@@ -1,0 +1,40 @@
+{
+  "status": {
+    "timestamp": "2018-12-06T09:38:22.218Z",
+    "error_code": 0,
+    "error_message": null,
+    "elapsed": 21,
+    "credit_count": 1
+  },
+  "data": [
+    {
+      "id": 1,  // id
+      "name": "Bitcoin", // 名称
+      "symbol": "BTC", // 符号
+      "slug": "bitcoin", // 用于获取该货币详细信息的参数
+      "circulating_supply": 17409400, // 当前流通的大概硬币数量
+      "total_supply": 17409400, //现在存在的大致硬币总量
+      "max_supply": 21000000, // 货币生命周期中存在的最大硬币数量的最佳近似值
+      "date_added": "2013-04-28T00:00:00.000Z",
+      "num_market_pairs": 6605, //交易每种货币的所有交易所的市场对数
+      "tags": [
+        "mineable"
+      ],
+      "platform": null,
+      "cmc_rank": 1,
+      "last_updated": "2018-12-06T09:36:23.000Z",
+      "quote": {
+        "USD": {
+          "price": 3870.91161297, //当前最新单价
+          "volume_24h": 5494767126.2431, // 货币的24小时交易量
+          "percent_change_1h": 0.101473, //货币的1小时交易价格百分比变化
+          "percent_change_24h": -0.265327, //货币的24小时交易价格百分比变化
+          "percent_change_7d": -9.42939, //货币的7天交易价格百分比变化
+          "market_cap": 67390248634.83992, // 最新总市值
+          "last_updated": "2018-12-06T09:36:23.000Z"
+        }
+      }
+    },
+    .....
+  ]
+}

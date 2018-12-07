@@ -11,7 +11,8 @@ public class Constants {
 
     public static final String ENCODE_IGNORE_CASE = "identity";//http設置encode忽略
     public static final long SleepTime800 = 800;
-    public static final String APIKEY = "";
+    //CoinMarketCap APIKey ：free
+    public static final String APIKEY = "280c9a41-9dc2-496a-8a6c-4b4063be9345";
 
     /*cycle time to choose*/
     public enum CycleTime {

@@ -1,8 +1,10 @@
 package bcaasc.io.chartdemo.interactor;
 
 import android.text.TextUtils;
+import bcaasc.io.chartdemo.bean.CompleteCurrencyBean;
 import bcaasc.io.chartdemo.bean.DetailOfCoinMarketCap;
 import bcaasc.io.chartdemo.bean.ListOfCoinMarketCap;
+import bcaasc.io.chartdemo.constants.Constants;
 import bcaasc.io.chartdemo.http.HttpApi;
 import bcaasc.io.chartdemo.http.retrofit.RetrofitFactory;
 import io.reactivex.Observable;
@@ -37,6 +39,14 @@ public class BcaasCInteractor {
     public Observable<ListOfCoinMarketCap> getListOfCurrency() {
         HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
         return httpApi.getCurrencyList();
+    }
+
+    /**
+     * 获取市场的所有列表更完整餓信息
+     */
+    public Observable<CompleteCurrencyBean> getCompleteListOfCurrency() {
+        HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
+        return httpApi.getCompleteCurrencyList(Constants.APIKEY);
     }
 
     /**
