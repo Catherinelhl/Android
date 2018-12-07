@@ -49,13 +49,12 @@ public class MainPresenterImp implements MainContract.Presenter {
                                            List<FilterCurrencyListBean> filterCurrencyListBeans = new ArrayList<>();
                                            for (CompleteCurrencyBean.Data data1 : data) {
                                                String name = data1.getName();
-                                               String slug=data1.getSlug();
-                                               float value = data1.getQuote().getUSD().getPrice();
-                                               float marketValue = data1.getQuote().getUSD().getMarket_cap();
-                                               FilterCurrencyListBean filterCurrencyListBean = new FilterCurrencyListBean(name, value, marketValue,slug);
+                                               String slug = data1.getSlug();
+                                               double value = data1.getQuote().getUSD().getPrice();
+                                               double marketValue = data1.getQuote().getUSD().getMarket_cap();
+                                               String symbol = data1.getSymbol();
+                                               FilterCurrencyListBean filterCurrencyListBean = new FilterCurrencyListBean(name, value, marketValue, slug, symbol);
                                                filterCurrencyListBeans.add(filterCurrencyListBean);
-
-
                                            }
 
                                            if (filterCurrencyListBeans != null && filterCurrencyListBeans.size() > 0) {

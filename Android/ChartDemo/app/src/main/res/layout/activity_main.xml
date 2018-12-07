@@ -2,11 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#000000"
               android:orientation="vertical">
     <Button
             android:id="@+id/btn_binance"
             android:layout_width="match_parent"
+            android:textAllCaps="false"
             android:text="KLine with Binance Data"
+            android:layout_height="wrap_content"/>
+    <Button
+            android:id="@+id/btn_refresh"
+            android:layout_width="match_parent"
+            android:textAllCaps="false"
+            android:text="Refresh Currency List"
             android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_currency_list"

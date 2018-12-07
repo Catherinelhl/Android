@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-
+              android:background="#000000"
               android:id="@+id/ll_item"
               android:layout_height="wrap_content">
     <TextView
@@ -12,24 +12,45 @@
             android:text="BitCoin"
             android:layout_margin="5dp"
             android:textSize="20sp"
-            android:textColor="#000000"/>
-    <TextView
-            android:id="@+id/tv_currency_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="價值："
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textSize="16sp"
-            android:textColor="#555555"/>
-    <TextView
-            android:id="@+id/tv_currency_market_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="市值："
-            android:layout_margin="5dp"
-            android:textSize="16sp"
-            android:textColor="#555555"/>
+            android:textStyle="bold"
+            android:textColor="@color/orange2"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:layout_marginLeft="5dp"
+                  android:layout_marginRight="5dp"
+                  android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price："
+                android:textSize="15sp"
+                android:textColor="#cccccc"/>
+        <TextView
+                android:id="@+id/tv_currency_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColorHighlight="#ffffff"
+                android:textColor="#ffffff"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:layout_margin="5dp"
+                  android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="市值 ："
+                android:textSize="15sp"
+                android:textColor="#cccccc"/>
+        <TextView
+                android:id="@+id/tv_currency_market_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHighlight="#ffffff"
+                android:textSize="15sp"
+                android:textColor="#ffffff"/>
+    </LinearLayout>
     <View android:layout_width="match_parent"
           android:background="@color/colorPrimary"
           android:layout_height="0.5dp"/>

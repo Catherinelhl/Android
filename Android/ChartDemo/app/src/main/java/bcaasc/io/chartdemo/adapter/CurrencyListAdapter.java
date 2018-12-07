@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import bcaasc.io.chartdemo.R;
 import bcaasc.io.chartdemo.bean.FilterCurrencyListBean;
 import bcaasc.io.chartdemo.listener.ItemSelectorListener;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import bcaasc.io.chartdemo.tool.DecimalTool;
 
 import java.util.List;
 
@@ -50,9 +49,9 @@ public class CurrencyListAdapter extends RecyclerView.Adapter<CurrencyListAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         FilterCurrencyListBean filterCurrencyListBean = filterCurrencyListBeans.get(position);
         if (filterCurrencyListBean != null) {
-            holder.tvCurrencyName.setText("CoinName:"+filterCurrencyListBean.getCurrencyName());
-            holder.tvCurrencyValue.setText("價值："+String.valueOf(filterCurrencyListBean.getCurrencyValue()));
-            holder.tvCurrencyMarketValue.setText("市值："+String.valueOf(filterCurrencyListBean.getCurrencyMarketTotalValue()));
+            holder.tvCurrencyName.setText(position + 1 + "." + filterCurrencyListBean.getCurrencyName() + "(" + filterCurrencyListBean.getSymbol() + ")");
+            holder.tvCurrencyValue.setText(" $ " + DecimalTool.transferDisplay(String.valueOf(filterCurrencyListBean.getCurrencyValue())));
+            holder.tvCurrencyMarketValue.setText(" $ " + DecimalTool.transferDisplay(String.valueOf(filterCurrencyListBean.getCurrencyMarketTotalValue())));
         }
         holder.llItem.setOnClickListener(new View.OnClickListener() {
             @Override

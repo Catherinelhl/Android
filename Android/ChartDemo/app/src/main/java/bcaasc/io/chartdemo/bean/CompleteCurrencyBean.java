@@ -214,12 +214,12 @@ public class CompleteCurrencyBean implements Serializable {
             }
 
           public   class USD {
-                private float price;//当前最新单价
-                private float volume_24h;// 货币的24小时交易量
-                private float percent_change_1h; //货币的1小时交易价格百分比变化
-                private float percent_change_24h;//货币的24小时交易价格百分比变化
-                private float percent_change_7d;//货币的7天交易价格百分比变化
-                private float market_cap; // 最新总市值
+                private double price;//当前最新单价
+                private double volume_24h;// 货币的24小时交易量
+                private double percent_change_1h; //货币的1小时交易价格百分比变化
+                private double percent_change_24h;//货币的24小时交易价格百分比变化
+                private double percent_change_7d;//货币的7天交易价格百分比变化
+                private double market_cap; // 最新总市值
                 private String last_updated;
 
                 @Override
@@ -235,62 +235,62 @@ public class CompleteCurrencyBean implements Serializable {
                             '}';
                 }
 
-                public float getPrice() {
-                    return price;
-                }
+              public double getPrice() {
+                  return price;
+              }
 
-                public void setPrice(float price) {
-                    this.price = price;
-                }
+              public void setPrice(double price) {
+                  this.price = price;
+              }
 
-                public float getVolume_24h() {
-                    return volume_24h;
-                }
+              public double getVolume_24h() {
+                  return volume_24h;
+              }
 
-                public void setVolume_24h(float volume_24h) {
-                    this.volume_24h = volume_24h;
-                }
+              public void setVolume_24h(double volume_24h) {
+                  this.volume_24h = volume_24h;
+              }
 
-                public float getPercent_change_1h() {
-                    return percent_change_1h;
-                }
+              public double getPercent_change_1h() {
+                  return percent_change_1h;
+              }
 
-                public void setPercent_change_1h(float percent_change_1h) {
-                    this.percent_change_1h = percent_change_1h;
-                }
+              public void setPercent_change_1h(double percent_change_1h) {
+                  this.percent_change_1h = percent_change_1h;
+              }
 
-                public float getPercent_change_24h() {
-                    return percent_change_24h;
-                }
+              public double getPercent_change_24h() {
+                  return percent_change_24h;
+              }
 
-                public void setPercent_change_24h(float percent_change_24h) {
-                    this.percent_change_24h = percent_change_24h;
-                }
+              public void setPercent_change_24h(double percent_change_24h) {
+                  this.percent_change_24h = percent_change_24h;
+              }
 
-                public float getPercent_change_7d() {
-                    return percent_change_7d;
-                }
+              public double getPercent_change_7d() {
+                  return percent_change_7d;
+              }
 
-                public void setPercent_change_7d(float percent_change_7d) {
-                    this.percent_change_7d = percent_change_7d;
-                }
+              public void setPercent_change_7d(double percent_change_7d) {
+                  this.percent_change_7d = percent_change_7d;
+              }
 
-                public float getMarket_cap() {
-                    return market_cap;
-                }
+              public double getMarket_cap() {
+                  return market_cap;
+              }
 
-                public void setMarket_cap(float market_cap) {
-                    this.market_cap = market_cap;
-                }
+              public void setMarket_cap(double market_cap) {
+                  this.market_cap = market_cap;
+              }
 
-                public String getLast_updated() {
-                    return last_updated;
-                }
+              public String getLast_updated() {
+                  return last_updated;
+              }
 
-                public void setLast_updated(String last_updated) {
-                    this.last_updated = last_updated;
-                }
-            }
+              public void setLast_updated(String last_updated) {
+                  this.last_updated = last_updated;
+              }
+          }
 
             @Override
             public String toString() {

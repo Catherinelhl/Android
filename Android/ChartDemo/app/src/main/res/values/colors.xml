@@ -5,5 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="border_color">#A7ADBC</color>
     <color name="transparent">#00000000</color>
+    <color name="orange">#f06457</color>
+    <color name="orange2">#f08457</color>
 
 </resources>

@@ -12,19 +12,23 @@ public class FilterCurrencyListBean implements Serializable {
     /* 貨幣名字*/
     private String currencyName;
     /*貨幣當前價值*/
-    private float currencyValue;
+    private double currencyValue;
     /*貨幣市場總價值*/
-    private float currencyMarketTotalValue;
+    private double currencyMarketTotalValue;
     /*貨幣 slug*/
     private String currencySlug;
+    /*货币Symbol*/
+    private String symbol;
 
 
-    public FilterCurrencyListBean(String currencyName, float currencyValue, float currencyMarketTotalValue, String currencySlug) {
+    public FilterCurrencyListBean(String currencyName, double currencyValue
+            , double currencyMarketTotalValue, String currencySlug,String symbol) {
         super();
         this.currencyName = currencyName;
         this.currencyValue = currencyValue;
         this.currencyMarketTotalValue = currencyMarketTotalValue;
         this.currencySlug = currencySlug;
+        this.symbol=symbol;
     }
 
     public String getCurrencySlug() {
@@ -44,20 +48,32 @@ public class FilterCurrencyListBean implements Serializable {
         this.currencyName = currencyName;
     }
 
-    public float getCurrencyValue() {
+    public double getCurrencyValue() {
         return currencyValue;
     }
 
-    public void setCurrencyValue(float currencyValue) {
+    public void setCurrencyValue(double currencyValue) {
         this.currencyValue = currencyValue;
     }
 
-    public float getCurrencyMarketTotalValue() {
+    public double getCurrencyMarketTotalValue() {
         return currencyMarketTotalValue;
+    }
+
+    public void setCurrencyMarketTotalValue(double currencyMarketTotalValue) {
+        this.currencyMarketTotalValue = currencyMarketTotalValue;
     }
 
     public void setCurrencyMarketTotalValue(float currencyMarketTotalValue) {
         this.currencyMarketTotalValue = currencyMarketTotalValue;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     @Override
@@ -67,6 +83,7 @@ public class FilterCurrencyListBean implements Serializable {
                 ", currencyValue=" + currencyValue +
                 ", currencyMarketTotalValue=" + currencyMarketTotalValue +
                 ", currencySlug='" + currencySlug + '\'' +
+                ", symbol='" + symbol + '\'' +
                 '}';
     }
 }

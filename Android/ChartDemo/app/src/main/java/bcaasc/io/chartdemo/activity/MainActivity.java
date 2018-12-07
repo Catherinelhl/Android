@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     Button btnBinance;
     @BindView(R.id.rv_currency_list)
     RecyclerView rvCurrencyList;
+    @BindView(R.id.btn_refresh)
+    Button btnRefresh;
     private MainContract.Presenter presenter;
 
     private List<FilterCurrencyListBean> filterCurrencyListBean;
@@ -78,6 +80,28 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                         Intent intent = new Intent();
                         intent.setClass(MainActivity.this, KLineChartOfBinanceActivity.class);
                         startActivity(intent);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        RxView.clicks(btnRefresh).throttleFirst(Constants.SleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        presenter.getCompleteCurrencyLists();
                     }
 
                     @Override
