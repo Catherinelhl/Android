@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="/Chart/resources/js/tools/moment.js"></script>
+    <style>
+        button {
+            background-color: rgba(23, 24, 27, 0.08);
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="height: 80%; margin: 0">
+
+<!-- 引入jquery -->
+<script src="/Chart/resources/js/tools/jquery-1.12.4.min.js"></script>
+
+<div id="contain" style="margin-left: 20px;">
+
+</div>
+
+<script type="text/javascript">
+
+    //初始化方法
+    $(function () {
+        //初始化加密货币列表
+        initCoin();
+    });
+
+    //获取加密货币列表
+    function initCoin() {
+        $.ajax({
+            url: "/Chart/getCoin",
+            type: "POST",
+            dataType: "json",
+            success: function (resultData) {
+                console.log(resultData);
+                var data = resultData["data"];
+
+                var forNum = data.length % 100 + 1;
+                for (var j = 0; j < forNum; j++) {
+
+                }
+
+                for (var i = 0; i < data.length; i++) {
+                    var name = data[i]["name"];
+                    var slug = data[i]["slug"];
+                    var price = data[i]["quote"]["USD"]["price"];
+                    var market_cap = data[i]["quote"]["USD"]["market_cap"];
+
+                    $("#contain").append("<a href='chartMarket.html?name=" + slug + "'>名称 : " + name + "</a>")
+                    $("#contain").append("<div>当前最新单价 ($) : " + price + "</div>")
+                    $("#contain").append("<div>最新总市值 ($) : " + market_cap + "</div>")
+                    $("#contain").append("<div>----------------------------</div>")
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    }
+
+    //一天前数据
+    $("#oneDay").click(function () {
+        myChart.clear();
+        var startTime = Date.parse(moment().subtract(1, 'days'));
+        coinMsg(startTime);
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript"
+            src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+    <script type="text/javascript"
+            src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+    <script type="text/javascript" src="/Chart/resources/js/tools/moment.js"></script>
+    <style>
+        button {
+            background-color: rgba(23, 24, 27, 0.08);
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="height: 80%; margin: 0">
+
+<!-- 引入jquery -->
+<script src="/Chart/resources/js/tools/jquery-1.12.4.min.js"></script>
+
+<!--时间选择按钮-->
+<div style="height: 10%;width:auto;margin-left: 40%;margin-bottom: 16px;">
+    <button id="oneDay">1d</button>
+    <button id="sevenDay">7d</button>
+    <button id="oneMonth">1m</button>
+    <button id="threeMonth">3m</button>
+    <button id="oneYear">1y</button>
+    <button id="ytd">YTD</button>
+    <button id="all">ALL</button>
+</div>
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="container" style="height: 80%"></div>
+
+
+<script type="text/javascript">
+
+    //当前coinName
+    var coinName = "";
+
+    //初始化方法
+    $(function () {
+
+        //初始化加密货币列表
+        //initBitcoin();
+
+
+        //穿参为空默认加载bitcoin
+        var name = getParams("name");
+        if (name != null && name != ""){
+            coinName = name;
+        }else {
+            coinName = "bitcoin";
+        }
+
+
+        //获取加密货币的价格、市值、交易量  startTime默认一天前
+        coinMsg(Date.parse(moment().subtract(1, 'days')));
+    });
+
+    //获取html url参数
+    function getParams(key) {
+        var reg = new RegExp("(^|)" + key + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+
+    //chart表格容器
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    option = null;
+
+    //加载chart
+    function loadEchat(market_cap, price_btc, price_usd) {
+        option = {
+            title: {
+                text: 'Chart_' + coinName
+            },
+            tooltip: {
+                trigger: 'axis',
+            },
+            legend: {
+                data: ['Market Cap', 'price(USD)', 'price(BTC)'],
+                selected: {
+                    'Market Cap': false,
+                    'price(USD)': false
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: true,
+                data: market_cap[0],
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}' //单位写法: ${value}
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: 'Market Cap',
+                    type: 'line',
+                    stack: '总量',
+                    data: market_cap[1]
+                },
+                {
+                    name: 'price(USD)',
+                    type: 'line',
+                    stack: '总量',
+                    data: price_usd[1]
+                },
+                {
+                    name: 'price(BTC)',
+                    type: 'line',
+                    stack: '总量',
+                    data: price_btc[1]
+                }
+            ]
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+
+    //获取加密货币列表
+    function initBitcoin() {
+        $.ajax({
+            url: "https://api.coinmarketcap.com/v2/listings/",
+            type: "GET",
+            dataType: "json",
+            success: function (resultData) {
+
+                alert(resultData);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    }
+
+    //获取 coin market_cap_by_available_supply,price_btc
+    function coinMsg(startTime) {
+        var endTime = getNowTimestamp();
+        $.ajax({
+            data: {
+                coinName: coinName,
+                startTime: startTime,
+                endTime: endTime
+            },
+            url: "/Chart/getCurrencies",
+            type: "POST",
+            dataType: 'json',
+            success: function (resultData) {
+
+                let market_cap = transFor(resultData["market_cap_by_available_supply"]);//市值数据 价值（USD）
+                let price_btc = transFor(resultData["price_btc"]);          //该货币对应的BTC单价 价格（BTC）
+                let price_usd = transFor(resultData["price_usd"]);          //该货币对应的USD单价 价格（USD）
+                //let volume_usd = transFor(resultData["volume_usd"]);            //交易量（USD）
+                //let price_platform = transFor(resultData["price_platform"]);    //ETC
+
+                loadEchat(market_cap, price_btc, price_usd)
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    }
+
+    //一天前数据
+    $("#oneDay").click(function () {
+        myChart.clear();
+        var startTime = Date.parse(moment().subtract(1, 'days'));
+        coinMsg(startTime);
+    });
+
+    //七天前的数据
+    $("#sevenDay").click(function () {
+        myChart.clear();
+        var startTime = Date.parse(moment().subtract(7, 'days'));
+        coinMsg(startTime);
+    });
+
+    //一个月前的数据
+    $("#oneMonth").click(function () {
+        myChart.clear();
+        var startTime = Date.parse(moment().subtract(1, 'months'));
+        coinMsg(startTime);
+    });
+
+    //三个月前数据
+    $("#threeMonth").click(function () {
+        myChart.clear();
+        var startTime = Date.parse(moment().subtract(3, 'months'));
+        coinMsg(startTime);
+    });
+
+    //一年前数据
+    $("#oneYear").click(function () {
+        myChart.clear();
+        var startTime = Date.parse(moment().subtract(1, 'years'));
+        coinMsg(startTime);
+    });
+
+    //从今年年初开始计算
+    $("#ytd").click(function () {
+        myChart.clear();
+        var mydate = new Date();
+        mydate.setMonth(0);
+        mydate.setDate(1);
+        mydate.setHours(0);
+        mydate.setMinutes(0);
+        mydate.setSeconds(0);
+        var startTime = Date.parse((mydate));
+        coinMsg(startTime);
+    });
+
+    //时间为空，接口返回的最大数据
+    $("#all").click(function () {
+        myChart.clear();
+        var startTime = "";
+        coinMsg(startTime);
+    });
+
+    //转换数据格式为数组
+    function transFor(data) {
+        let Time = [];
+        let Data = [];
+        for (let i = 0; i <= data.length - 1; i++) {
+            Time.push(fmtDate(data[i][0]));
+            // 转换科学计数法的数据
+            // data[i][1] = getFullNum(data[i][1]);
+            Data.push(data[i][1]);
+        }
+        let d = [];
+        d.push(Time);
+        d.push(Data);
+        return d;
+    }
+
+    //转换科学技术法数据为字符串
+    function getFullNum(num) {
+        //处理非数字
+        if (isNaN(num)) {
+            return num;
+        }
+        //处理不需要转换的数字
+        var str = '' + num;
+        if (!/e/i.test(str)) {
+            return num;
+        }
+        return (num).toFixed(8).replace(/\.?0+$/, "");
+    }
+
+    //获取当前时间时间戳
+    function getNowTimestamp() {
+        var timestamp = Date.parse(new Date());
+        return timestamp;
+    }
+
+    //当前时间的num天前
+    function getDaybefore(dayNum) {
+        var dayNumTimestamp = dayNum * 24 * 60 * 60 * 1000;
+        var timestamp = getNowTimestamp() - dayNumTimestamp;
+        return timestamp;
+    }
+
+    //时间戳转换成时间
+    function fmtDate(value) {
+        var dateTimeZone = moment(parseInt(value)).toDate();
+        return dateTimeZone;
+    }
+
+</script>
+
+</body>
+</html>
