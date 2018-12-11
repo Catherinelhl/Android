@@ -284,8 +284,8 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
             xAxis.setDrawLimitLinesBehindData(true);
 
             // add limit lines
-            yAxis.addLimitLine(ll1);
-            yAxis.addLimitLine(ll2);
+//            yAxis.addLimitLine(ll1);
+//            yAxis.addLimitLine(ll2);
             //xAxis.addLimitLine(llXAxis);
 
         }
@@ -616,7 +616,7 @@ public class LineChartOfCoinMarketCapActivity extends DemoBase
         volumeUSD = detailOfCoinMarketCap.getVolume_usd();
         LogTool.d(TAG, "volumeUSD:" + volumeUSD);
         initLineChart();
-        initBarChart();
+//        initBarChart();
     }
 
     @Override
